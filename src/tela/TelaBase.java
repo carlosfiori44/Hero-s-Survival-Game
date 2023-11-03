@@ -13,14 +13,20 @@ public class TelaBase extends JFrame {
 	public TelaBase() {		
 		setSize(778, 562);
 		
+		Fase fase = new Fase();
+		
 		//Adicionando o imagem de fundo da tela (JPanel)
-		add(new Fase());
+		add(fase);	
+		
+		fase.startGameThread();
 		
 		setTitle("Hero's Quest");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		this.setResizable(false);
 		setVisible(true);
+		
+		
 	}
 	
 	public static void main(String[] args) {

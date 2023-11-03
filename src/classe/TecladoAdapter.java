@@ -7,10 +7,11 @@ import java.awt.event.KeyListener;
  * Classe utilizada para mover o personagem conforme as teclas são pressionadas
  */
 public class TecladoAdapter implements KeyListener{
-	Character player;	
+	//Player player;	
+	public boolean cima, baixo, esquerda, direita;
 	
-	public TecladoAdapter(Character player) {
-		this.player = player;
+	public TecladoAdapter() {
+		//this.player = player;
 	}
 	
 	@Override
@@ -19,12 +20,41 @@ public class TecladoAdapter implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		player.pressionarTecla(e);
+		//player.pressionarTecla(e);
+			
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_W: 
+			cima = true; 
+			break;
+		case KeyEvent.VK_S: 
+			baixo = true;
+			break;
+		case KeyEvent.VK_A: 
+			esquerda = true;
+			break;
+		case KeyEvent.VK_D: 
+			direita = true;
+			break;
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		player.soltarTecla(e);
+		//player.soltarTecla(e);
+		
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_W: 
+			cima = false; 
+			break;
+		case KeyEvent.VK_S: 
+			baixo = false;
+			break;
+		case KeyEvent.VK_A: 
+			esquerda = false;
+			break;
+		case KeyEvent.VK_D: 
+			direita = false;
+			break;
+		}		
 	}
-
 }
