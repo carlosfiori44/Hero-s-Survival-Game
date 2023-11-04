@@ -3,15 +3,17 @@ package classe;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Character {
 	//Declarando atributos utilizados em cada personagem
 	protected int x, y;
 	//Atributo que vai receber a imagem do personagem
-	protected Image imagem;
-	protected String diretorioImagem;
+	protected BufferedImage image;
 	//Respectivos tamanho da imagem do personagem
 	protected int altura, largura;
 	
@@ -23,7 +25,12 @@ public class Character {
 	public Character(int atualX, int atualY, String source) {
 		this.x = atualX;
 		this.y = atualY;
-		this.diretorioImagem = source;
+		
+		try {
+			this.image = ImageIO.read(getClass().getResource(source));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -35,14 +42,9 @@ public class Character {
 	}
 	
 	/**
-	 * Método utilizado para definir a imagem do personagem
+	 * Método utilizado para definir todas as imagens do personagem
 	 */
-	public void load() {
-		ImageIcon referencia = new ImageIcon(diretorioImagem);
-		imagem = referencia.getImage();
-		
-		altura = imagem.getHeight(null);
-		largura = imagem.getWidth(null);
+	public void loadPlayerImage() {	
 	}
 		
 	/**
@@ -63,7 +65,7 @@ public class Character {
 	}
 
 	public Image getImagem() {
-		return imagem;
+		return image;
 	}
 	
 	

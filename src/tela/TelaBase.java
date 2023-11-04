@@ -3,7 +3,7 @@ package tela;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import fase.Fase;
+import fase.GamePanel;
 
 public class TelaBase extends JFrame {
 	
@@ -13,7 +13,7 @@ public class TelaBase extends JFrame {
 	public TelaBase() {		
 		setSize(778, 562);
 		
-		Fase fase = new Fase();
+		GamePanel fase = new GamePanel();
 		
 		//Adicionando o imagem de fundo da tela (JPanel)
 		add(fase);	
