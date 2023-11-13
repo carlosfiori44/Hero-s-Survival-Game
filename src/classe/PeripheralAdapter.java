@@ -1,23 +1,30 @@
 package classe;
 
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import fase.GamePanel;
 
 /**
  * Classe utilizada para mover o personagem conforme as teclas são pressionadas
  */
-public class TecladoAdapter implements KeyListener{
+public class PeripheralAdapter implements KeyListener {
 	//Declarando atributos relacionados a movimentação do player
-	public boolean up, down, left, right;
+	public boolean up, down, left, right, action, esc;	
+	//Váriavel do painel que executa o jogo
+	private GamePanel gp;
+	
+	public PeripheralAdapter(GamePanel gp) {
+		this.gp = gp;
+	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {		
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		//player.pressionarTecla(e);
-			
+	public void keyPressed(KeyEvent e) {			
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W: 
 			up = true; 
@@ -31,13 +38,21 @@ public class TecladoAdapter implements KeyListener{
 		case KeyEvent.VK_D: 
 			right = true;
 			break;
+		case KeyEvent.VK_E:
+			action = true;
+			break;
+		case KeyEvent.VK_ESCAPE:
+			if(gp.gameState == gp.PLAYSCREEN) {
+				gp.gameState = gp.PAUSESCREEN;
+			} else if(gp.gameState == gp.PAUSESCREEN){
+				gp.gameState = gp.PLAYSCREEN;
+			}			
+			break;
 		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		//player.soltarTecla(e);
-		
+	public void keyReleased(KeyEvent e) {		
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W: 
 			up = false; 
@@ -50,6 +65,12 @@ public class TecladoAdapter implements KeyListener{
 			break;
 		case KeyEvent.VK_D: 
 			right = false;
+			break;
+		case KeyEvent.VK_E:
+			action = false;
+			break;
+		case KeyEvent.VK_ESCAPE:
+			esc = false;
 			break;
 		}		
 	}

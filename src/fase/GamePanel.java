@@ -2,30 +2,38 @@ package fase;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import classe.GameController;
+import classe.Mapa;
 import classe.Player;
-import classe.TecladoAdapter;
+import item.SetItem;
+import item.SuperItem;
+import classe.PeripheralAdapter;
 
-public class GamePanel extends JPanel implements Runnable {
-	//Definindo os atributos das imagens de fundo
-	private Image background, backgroundAllow;
-	//Variavel que guarda o fundo atual
-	public static String currentBackground;
+public class GamePanel extends JPanel implements Runnable {  
+	//Classe que lê as teclas pressionadas
+	private PeripheralAdapter peripheral = new PeripheralAdapter(this);
 	//Criando objeto do tipo Character
-	private Player player;   
-	//Classe que adapta as teclas pressionadas
-	private TecladoAdapter tecladoA;
+	private Player player = new Player(peripheral); 
+	//Classe que projeta o background
+	private Mapa map = new Mapa();
 	//Definindo a Thread
-	private Thread gameThread;
+	private Thread gameThread;	
 	//Frames por segundo
 	private final int FPS = 30;
-
+	//Estado atual do jogo
+	public final int TITLESCREEN = 0;
+	public final int PLAYSCREEN = 1;		
+	public final int PAUSESCREEN = 2;
+	public int gameState = TITLESCREEN;
+	//Definindo classe de itens, 'inventário de itens' e localização de itens
+	public SetItem setItem = new SetItem(this);
+	public SuperItem item[] = new SuperItem[4];	
+	//Classe que faz o controle entre menu, itens, personagens e mapas
+	private GameController gameC = new GameController(map, player, item, this); 	
+	
 	/**
 	 * Método construtor da clase Fase, utilizada quando a mesma é instanciada
 	 * @param background recebe o diretorio da imagem de fundo da tela
@@ -33,21 +41,18 @@ public class GamePanel extends JPanel implements Runnable {
 	public GamePanel() {
 		this.setFocusable(true);
 		this.setDoubleBuffered(true);
-
-		ImageIcon back = new ImageIcon("res\\background\\mapa_ilha.png");
-		ImageIcon backAllow = new ImageIcon("res\\background\\mapa_ilha_allow.png");
+		this.setLayout(null);		
+		this.addKeyListener(peripheral);	
 		
-		background = back.getImage();
-		backgroundAllow = backAllow.getImage();
-
-		tecladoA = new TecladoAdapter();
-		this.addKeyListener(tecladoA);	
-
-		player = new Player(220, 240, tecladoA);
-		player.loadPlayerImage();						
-
-		//timer = new Timer(1000/60, this);
-		//timer.start();
+		player.load();			
+		map.load();		
+	}
+	
+	/**
+	 * Inicializa as primeira configurações do jogo
+	 */
+	public void setupGame() {
+		setItem.setItem();
 	}
 
 	/**
@@ -55,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
 	 */
 	public void startGameThread() {
 		gameThread = new Thread(this);
-		gameThread.start();
+		gameThread.start();	
 	}
 
 	//É executado assim que a thread se inicia
@@ -65,33 +70,43 @@ public class GamePanel extends JPanel implements Runnable {
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
-
-		while(gameThread != null) { 
-			currentBackground = "res\\background\\mapa_ilha_allow.png";
-			
+		
+		while(gameThread != null) { 			
 			currentTime = System.nanoTime();
 			delta += (currentTime - lastTime) / drawInterval;
 			lastTime = currentTime;
 
-			if(delta >= 1) {
-				player.update();
-				repaint();
+			if(delta >= 1) {	
+				update();
+				repaint();				
 				delta--;
 			}
 		}
+	}
+	
+	/**
+	 * Atualiza a localização dos objetos
+	 */
+	public void update() {
+		if(gameState == PLAYSCREEN) {
+			player.update();	
+			
+			if(peripheral.action) {
+				for(int i = 0; i < item.length; i++) {
+					if(item[i] != null && item[i].findItem(player.limiteForma())) {
+						player.addItem(item[i]);
+						item[i] = null;
+					};
+				}
+			}
+		} 					
 	}
 
 	/**
 	 * Coloca as imagem dos objetos dentro da tela, como por exemplo o personagem
 	 */ 
 	public void paintComponent(Graphics g) {
-		Graphics2D graficos = (Graphics2D) g;		
-
-		graficos.drawImage(background, 0, 0, null);
-		graficos.drawImage(backgroundAllow, 0, 0, null);
-
-		player.draw(graficos);
-
-		g.dispose();
+		Graphics2D graficos = (Graphics2D) g;	
+		if(gameC.draw(graficos)) g.dispose();
 	}
 }

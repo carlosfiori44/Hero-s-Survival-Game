@@ -1,14 +1,42 @@
 package classe;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import fase.GamePanel;
-
 public class Mapa {
+	//Definindo o atributos das imagens de fundo
+	private BufferedImage map_Island_Image;
+	//Variavel que guarda o fundo atual somente com as localizações permitidas para movimentação
+	private static BufferedImage currentBackgroundAllow;	
+	//Variavel que irá indicar o mapa que deverá aparecer
+	public int map;
+	//Definindo quais os mapas para passagem
+	public final int MAP_ISLAND = 0;
+	public final int MAP_HOUSE = 1;
+	public final int MAP_CASTLE = 2;
+	
+	
+	public Mapa() {
+	}
+	
+	/**
+	 * Carrega a imagem de todos os mapas
+	 */
+	public void load() {
+		try {
+			switch(map) {
+			case 0:
+				map_Island_Image = ImageIO.read(getClass().getResource("/background/mapa_ilha.png"));
+				currentBackgroundAllow = ImageIO.read(getClass().getResource("/background/mapa_ilha_allow.png"));
+				break;
+			}					
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Método que verifica se a posição em que foi passada é caminhável ou não
@@ -17,19 +45,22 @@ public class Mapa {
 	 * @return verdadeiro caso seja caminhável ou falso caso contrario
 	 */
 	public static boolean isWalkable(int x, int y) {
-		BufferedImage walkableAreas = null;
-		try {
-			walkableAreas = ImageIO.read(new File(GamePanel.currentBackground));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		int rgb = walkableAreas.getRGB(x, y);
+		int rgb = currentBackgroundAllow.getRGB(x, y);
 		
 		if(rgb == 0) {
 			return false;
 		}				
 		return true;
+	}
+	
+	/**
+	 * Coloca no JFrame o mapa atual em que o personagem está
+	 * @param g2 Objeto gráfico para atualizar no JPanel
+	 */
+	public void draw(Graphics2D g2) {	
+		if(map == MAP_ISLAND) {
+			g2.drawImage(map_Island_Image, 0, 0, null);
+		}
 	}
 	
 }

@@ -1,12 +1,21 @@
 package classe;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.ImageIO;
+
+import item.SuperItem;
 
 public class Player extends Character {
-	TecladoAdapter key;
+	PeripheralAdapter key;
 	//Velocidade do personagem
 	private final int VELOCIDADE = 1;
 	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda)
@@ -15,14 +24,26 @@ public class Player extends Character {
 	private char direction = 'd';
 	//Contagem para alteração da animação do personagem andando
 	private int spriteNum = 1, spriteCounter = 0;
+	//Definindo inventário do personagem
+	private List<SuperItem> item = new ArrayList<SuperItem>();
 
-	public Player(int atualX, int atualY, TecladoAdapter key) {
-		super(atualX, atualY, "/player/player.png");
+	//Construtor
+	public Player(PeripheralAdapter key) {
 		this.key = key;
+
+		try {
+			this.image = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		solidArea = new Rectangle();
 	}
 
 	@Override
-	public void loadPlayerImage() {
+	public void load() {		
+		//Carreangdo as imagens de todas as direções do player 
 		altura = image.getSubimage(91, 131, 10, 16).getHeight();
 		largura = image.getSubimage(91, 131, 10, 16).getWidth();
 
@@ -45,40 +66,36 @@ public class Player extends Character {
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         left = op.filter(right, null);
         left1 = op.filter(right1, null);
-        left2 = op.filter(right2, null);
+        left2 = op.filter(right2, null);                
 	}
-
-	public void playerAnimation() {
-
-	}
-
+ 
 	/**
 	 * Faz a atualização das coordenadas do personagem de acordo com a velocidade definida e verificar se é um
 	 * caminho de fato e atualiza as 'sprites' referentes a imagem do personagem andando
 	 */
-	public void update() {
-		int yPlayer = y + altura;
-		int xPlayerLeft = x;
-		int xPlayerRight = x + largura;
-
-
+	public void update()  {
+		int yPlayer = yScreen + altura;
+		int xPlayerLeft = xScreen;
+		int xPlayerRight = xScreen + largura;
+		
+		
 		if(key.down && Mapa.isWalkable(xPlayerLeft, yPlayer+VELOCIDADE) && Mapa.isWalkable(xPlayerRight, yPlayer+VELOCIDADE)) {
-			y+=VELOCIDADE; 
+			yScreen+=VELOCIDADE; 
 			direction = 'd';
 		} 
 		if(key.up && Mapa.isWalkable(xPlayerLeft, yPlayer-VELOCIDADE) && Mapa.isWalkable(xPlayerRight, yPlayer-VELOCIDADE)) {
-			y-=VELOCIDADE; 
+			yScreen-=VELOCIDADE; 
 			direction = 'u';
 		}		
 		if(key.left && Mapa.isWalkable(xPlayerLeft+VELOCIDADE, yPlayer+VELOCIDADE)) {
-			x-=VELOCIDADE; 
+			xScreen-=VELOCIDADE; 
 			direction = 'l';
 		}
 		if(key.right && Mapa.isWalkable(xPlayerRight-VELOCIDADE, yPlayer)) {
-			x+=VELOCIDADE; 
+			xScreen+=VELOCIDADE; 
 			direction = 'r';
 		}
-
+	
 		//Váriaveis de atualização das imagens de animação do personagem
 		if(key.down || key.up || key.right || key.left) {
 			spriteCounter++;
@@ -93,10 +110,7 @@ public class Player extends Character {
 		}
 	}
 
-	/**
-	 * Atualiza o posição do atual 'frame' do personagem dentro do JFrame
-	 * @param g2 Objeto gráfico para atualizar no JPanel
-	 */
+	@Override
 	public void draw(Graphics2D g2) {
 		switch(direction) {
 		case 'u':
@@ -129,7 +143,7 @@ public class Player extends Character {
 				image = left1;
 			}
 			if(spriteNum == 3) {
-				image = left1;
+				image = left2;
 			}
 			break;
 		case 'r':
@@ -143,8 +157,40 @@ public class Player extends Character {
 				image = right2;
 			}
 			break;
+		}		
+		
+		g2.drawImage(image, xScreen, yScreen, null);
+		showItem(g2);
+	}
+	
+	/**
+	 * Mostra os itens dentro do invetário do personagem
+	 * @param g2 recebe o componente gráfico do tipo Graphics2D para adicionalo a tela
+	 */
+	public void showItem(Graphics2D g2) {
+		for(SuperItem i : item){
+			int wid = i.getImage().getWidth()+2;
+			
+			i.setPositionX(1);
+			i.setPositionY(42);
+			
+
+			g2.setColor(Color.gray);
+			g2.fillRect(0, 41+i.getImage().getWidth(), wid, wid);
+			i.draw(g2);
+		}
+	}
+	
+	/**
+	 * Adiciona o item que o usuário pegou próximo a ele
+	 * @param item item que o usuário pegou
+	 */
+	public void addItem(SuperItem item) {
+		if(this.item.size() != 5) {
+			this.item.add(item);	
+			return;			
 		}
 
-		g2.drawImage(image, x, y, null);
+		System.out.println("Inventário cheio");
 	}
 }
