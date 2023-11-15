@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 public class Character {
 	//Declarando atributos utilizados em cada personagem
-	protected int xScreen, yScreen;
+	public int xScreen, yScreen, xWorld, yWorld;
 	//Atributo que vai receber a imagem do personagem
 	protected BufferedImage image;
 	//Respectivos tamanho da imagem do personagem

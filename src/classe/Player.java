@@ -12,16 +12,18 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import Game.GamePanel;
 import item.SuperItem;
+import map.MapController;
 
 public class Player extends Character {
 	PeripheralAdapter key;
 	//Velocidade do personagem
-	private final int VELOCIDADE = 1;
+	private final int VELOCIDADE = 15;
 	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda)
 	private BufferedImage down, down1, down2, up, up1, up2, right, right1, right2, left, left1, left2;
 	//Qual direção o personagem está virado
-	private char direction = 'd';
+	private char direction;
 	//Contagem para alteração da animação do personagem andando
 	private int spriteNum = 1, spriteCounter = 0;
 	//Definindo inventário do personagem
@@ -30,7 +32,15 @@ public class Player extends Character {
 	//Construtor
 	public Player(PeripheralAdapter key) {
 		this.key = key;
-
+		
+		xScreen = GamePanel.SCRRENWIDTH/2 - (GamePanel.TILESIZE/2);
+		yScreen = GamePanel.SCREENHEIGHT/2 - (GamePanel.TILESIZE/2);
+		
+		xWorld = 80*16;
+		yWorld = 15*16;
+		
+		direction = 'd';
+		
 		try {
 			this.image = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
 		} catch (IOException e) {
@@ -49,7 +59,7 @@ public class Player extends Character {
 
 		down = image.getSubimage(91, 131, 10, 16);
 		down1 = image.getSubimage(77, 131, 10, 16);
-		down2 = image.getSubimage(107, 131, 10, 16);
+		down2 = image.getSubimage(107, 131, 10, 16);	
 
 		up = image.getSubimage(91, 150, 10, 16);
 		up1 = image.getSubimage(78, 150, 10, 16);
@@ -74,25 +84,29 @@ public class Player extends Character {
 	 * caminho de fato e atualiza as 'sprites' referentes a imagem do personagem andando
 	 */
 	public void update()  {
-		int yPlayer = yScreen + altura;
-		int xPlayerLeft = xScreen;
-		int xPlayerRight = xScreen + largura;
+		int yPlayer = yWorld + altura;
+		int xPlayerLeft = xWorld;
+		int xPlayerRight = xWorld + largura;
 		
 		
-		if(key.down && Mapa.isWalkable(xPlayerLeft, yPlayer+VELOCIDADE) && Mapa.isWalkable(xPlayerRight, yPlayer+VELOCIDADE)) {
-			yScreen+=VELOCIDADE; 
+		//if(key.down && MapController.isWalkable(xPlayerLeft, yPlayer+VELOCIDADE) && MapController.isWalkable(xPlayerRight, yPlayer+VELOCIDADE)) {
+		if(key.down) {
+			yWorld+=VELOCIDADE; 
 			direction = 'd';
 		} 
-		if(key.up && Mapa.isWalkable(xPlayerLeft, yPlayer-VELOCIDADE) && Mapa.isWalkable(xPlayerRight, yPlayer-VELOCIDADE)) {
-			yScreen-=VELOCIDADE; 
+		//if(key.up && MapController.isWalkable(xPlayerLeft, yPlayer-VELOCIDADE) && MapController.isWalkable(xPlayerRight, yPlayer-VELOCIDADE)) {
+		if(key.up) {
+			yWorld-=VELOCIDADE; 
 			direction = 'u';
 		}		
-		if(key.left && Mapa.isWalkable(xPlayerLeft+VELOCIDADE, yPlayer+VELOCIDADE)) {
-			xScreen-=VELOCIDADE; 
+		//if(key.left && MapController.isWalkable(xPlayerLeft+VELOCIDADE, yPlayer+VELOCIDADE)) {
+		if(key.left) {
+			xWorld-=VELOCIDADE; 
 			direction = 'l';
 		}
-		if(key.right && Mapa.isWalkable(xPlayerRight-VELOCIDADE, yPlayer)) {
-			xScreen+=VELOCIDADE; 
+		//if(key.right && MapController.isWalkable(xPlayerRight-VELOCIDADE, yPlayer)) {
+		if(key.right) {
+			xWorld+=VELOCIDADE; 
 			direction = 'r';
 		}
 	
@@ -159,12 +173,12 @@ public class Player extends Character {
 			break;
 		}		
 		
-		g2.drawImage(image, xScreen, yScreen, null);
+		g2.drawImage(image, xScreen, yScreen, GamePanel.TILESIZE, GamePanel.TILESIZE, null);
 		showItem(g2);
 	}
 	
 	/**
-	 * Mostra os itens dentro do invetário do personagem
+	 * Mostra os itens dentro do invetário do personagem 
 	 * @param g2 recebe o componente gráfico do tipo Graphics2D para adicionalo a tela
 	 */
 	public void showItem(Graphics2D g2) {
@@ -192,5 +206,5 @@ public class Player extends Character {
 		}
 
 		System.out.println("Inventário cheio");
-	}
+	}		
 }

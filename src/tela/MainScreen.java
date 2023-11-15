@@ -4,8 +4,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import classe.GameController;
-import fase.GamePanel;
+import Game.GameController;
+import Game.GamePanel;
 
 public class MainScreen extends JFrame {
 	
@@ -15,18 +15,16 @@ public class MainScreen extends JFrame {
 	public MainScreen() {		
 		GamePanel fase = new GamePanel();	
 
-		//Tamanho padrão da tela
-		setSize(778, 562);
 		//Definindo estado da janela
 		setTitle("Hero's Quest");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setResizable(false);
-		setVisible(true);		
-		
+		setResizable(true);
+		setVisible(true);				
 
 		//Adicionando o imagem de fundo da tela (JPanel)
 		this.add(fase);			
+		pack();
 		//Definindo primeiras configurações do jogo inicio do jogo
 		fase.setupGame();		
 		//Iniciando thread que vai rodar o o JFrame do jogo

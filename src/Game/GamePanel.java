@@ -1,28 +1,33 @@
-package fase;
+package Game;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import classe.GameController;
-import classe.Mapa;
 import classe.Player;
 import item.SetItem;
 import item.SuperItem;
+import map.MapController;
 import classe.PeripheralAdapter;
 
 public class GamePanel extends JPanel implements Runnable {  
+	//Atributos do tamanho da tela e blocos (tiles)
+	public final static int DEFAULTTILESIZE = 16, SCALE = 5;
+	public final static int TILESIZE = DEFAULTTILESIZE * SCALE;
+	public final static int MAXSCREENCOL = 15, MAXSCREENROW = 13;
+	public final static int	SCREENHEIGHT = TILESIZE * MAXSCREENROW, SCRRENWIDTH = TILESIZE * MAXSCREENCOL;
 	//Classe que lê as teclas pressionadas
 	private PeripheralAdapter peripheral = new PeripheralAdapter(this);
 	//Criando objeto do tipo Character
 	private Player player = new Player(peripheral); 
 	//Classe que projeta o background
-	private Mapa map = new Mapa();
+	private MapController map = new MapController();
 	//Definindo a Thread
 	private Thread gameThread;	
 	//Frames por segundo
-	private final int FPS = 30;
+	private final int FPS = 60;
 	//Estado atual do jogo
 	public final int TITLESCREEN = 0;
 	public final int PLAYSCREEN = 1;		
@@ -39,6 +44,7 @@ public class GamePanel extends JPanel implements Runnable {
 	 * @param background recebe o diretorio da imagem de fundo da tela
 	 */
 	public GamePanel() {
+		this.setPreferredSize(new Dimension(SCRRENWIDTH, SCREENHEIGHT));;
 		this.setFocusable(true);
 		this.setDoubleBuffered(true);
 		this.setLayout(null);		

@@ -1,4 +1,4 @@
-package classe;
+package map;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Mapa {
+public class MapController {
 	//Definindo o atributos das imagens de fundo
 	private BufferedImage map_Island_Image;
 	//Variavel que guarda o fundo atual somente com as localizações permitidas para movimentação
@@ -17,9 +17,11 @@ public class Mapa {
 	public final int MAP_ISLAND = 0;
 	public final int MAP_HOUSE = 1;
 	public final int MAP_CASTLE = 2;
+	//Definindo atributo referente a classe MapTiles para os mapas gerados
+	//MapTiles tile = new MapTiles();
 	
 	
-	public Mapa() {
+	public MapController() {
 	}
 	
 	/**
@@ -59,7 +61,8 @@ public class Mapa {
 	 */
 	public void draw(Graphics2D g2) {	
 		if(map == MAP_ISLAND) {
-			g2.drawImage(map_Island_Image, 0, 0, null);
+			//g2.drawImage(map_Island_Image, 0, 0, null);
+			//tile.draw(g2);
 		}
 	}
 	

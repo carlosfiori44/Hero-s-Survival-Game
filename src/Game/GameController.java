@@ -1,4 +1,4 @@
-package classe;
+package Game;
 
 import java.awt.Button;
 import java.awt.Color;
@@ -19,8 +19,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import fase.GamePanel;
+import classe.Player;
 import item.SuperItem;
+import map.MapController;
+import map.MapTiles;
 
 public class GameController {
 	//Definindo o atributos das imagens de fundo
@@ -29,16 +31,18 @@ public class GameController {
 	private JButton btPlay;
 	private Rectangle btPlayBounds;
 	private Player player;
-	private Mapa map;
+	private MapController map;
 	private GamePanel gp;
 	private SuperItem item[];
 	private boolean dispose = false;
+	private MapTiles tile;
 
-	public GameController(Mapa map, Player player, SuperItem item[], GamePanel gp) {
+	public GameController(MapController map, Player player, SuperItem item[], GamePanel gp) {
 		this.map = map;
 		this.player = player;
 		this.gp = gp;
 		this.item = item;
+		tile = new MapTiles(player);
 				
 		//Carrega as imagens referentes a menu, seja pausa ou menu principal
 		try {
@@ -61,7 +65,6 @@ public class GameController {
 		btPlay.addActionListener(new ActionListener() {					
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				player.setPosition(215, 234);
 				map.map = map.MAP_ISLAND;
 				gp.gameState = gp.PLAYSCREEN;
 				gp.remove(btPlay);				
@@ -95,13 +98,14 @@ public class GameController {
 		
 		//Verifica se o estado do jogo é no modo jogável
 		if(gp.gameState == gp.PLAYSCREEN) {		
-			map.draw(g2);
+			//map.draw(g2);
+			tile.draw(g2);			
 			
-			for(int i = 0; i < item.length; i++) {
+			/*for(int i = 0; i < item.length; i++) {
 				if(item[i] != null) {
 					item[i].draw(g2);
 				}
-			}
+			}*/
 			
 			player.draw(g2);			
 			

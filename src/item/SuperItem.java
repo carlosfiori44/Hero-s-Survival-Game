@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import fase.GamePanel;
+import Game.GamePanel;
 
 public class SuperItem {
 	protected BufferedImage image;
