@@ -10,22 +10,25 @@ import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 
 import Game.GamePanel;
-import classe.Player;
+import player.Player;
 
 public class MapTiles {
 	//Definindo atributos
-	private Player player;
+	private GamePanel gp;
 	private Tile[] tile;
 	private int numTile = 100;
 	private BufferedImage allTileImage;
 	private int mapTilePosition[][];
 	private int maxWorldCol = 100;
 	private int maxWorldRow = 100;
-	private int maxWorldWidth = maxWorldCol * GamePanel.TILESIZE, maxWorldHeight = maxWorldRow * GamePanel.TILESIZE;
-	
-	public MapTiles(Player player){
-		this.player = player;
+	private int maxWorldWidth, maxWorldHeight;
+
+	public MapTiles(GamePanel gp){
+		this.gp = gp;
 		
+		maxWorldWidth = maxWorldCol * gp.TILESIZE;
+		maxWorldHeight = maxWorldRow * gp.TILESIZE;
+
 		try {
 			allTileImage = ImageIO.read(getClass().getResourceAsStream("/tile/tileSetWorld.png"));
 			tile = new Tile[numTile];
@@ -45,7 +48,7 @@ public class MapTiles {
 		public BufferedImage image;
 		public boolean collision = false;
 	}
-	
+
 	/**
 	 * Cria e carrega o array do tipo Tile para cada quadrado de imagem que constroe o mapa
 	 */
@@ -53,18 +56,28 @@ public class MapTiles {
 		for(int i = 0; i < numTile; i++) {
 			tile[i] = new Tile();
 		}
-		
+
 		int numImage = 0;
-		
+
 		for(int row = 0; row < allTileImage.getHeight(); row+=16) {			
 			for(int col = 0; col < allTileImage.getWidth(); col+=16) {
 				tile[numImage].image = allTileImage.getSubimage(col, row, 16, 16);
 				numImage++;
 			}			
 		}
+		
+		//Definindo os blocos que não são possíveis de atravessar 	
+		tile[0].collision = true;
+		tile[9].collision = true;
+		tile[10].collision = true;
+		tile[11].collision = true;
+		tile[12].collision = true;
+		tile[16].collision = true;
+		tile[17].collision = true;
+		tile[18].collision = true;
 	}
-	
-	
+
+
 	/**
 	 * Carrega a construção do mapa, que se baseia em números que representam o número de um bloco (tile) que então é interpretado
 	 * e substituido por uma imagem do bloco
@@ -93,7 +106,7 @@ public class MapTiles {
 					row++;
 				}
 			}
-			
+
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -107,16 +120,23 @@ public class MapTiles {
 	public void draw(Graphics2D g2) {
 		int col = 0;
 		int row = 0;
-		
+
 		while(col < maxWorldCol && row < maxWorldRow) {			
 			int tileNum = mapTilePosition[col][row];
 
-			int worldX = col * GamePanel.TILESIZE;
-			int worldY = row * GamePanel.TILESIZE;
-			int	screenX = worldX - player.xWorld + player.xScreen;
-			int	screenY = worldY - player.yWorld + player.yScreen;
-			
-			g2.drawImage(tile[tileNum].image, screenX, screenY, GamePanel.TILESIZE, GamePanel.TILESIZE, null);			
+			//Pega as coordenas atuais do mudo, em relação a coluna e linha
+			int worldX = col * gp.TILESIZE;
+			int worldY = row * gp.TILESIZE;
+			//Pega as coordenadas atuais da janela, que é onde o player está no mapa
+			int	screenX = worldX - gp.player.xWorld + gp.player.xScreen;
+			int	screenY = worldY - gp.player.yWorld + gp.player.yScreen;
+
+			//Verifica se o bloco esta dentro dos limites da janela para que ele não renderize o mapa inteiro e economize desempenho
+			if(worldX + gp.TILESIZE > gp.player.xWorld - gp.player.xScreen && worldX - gp.TILESIZE < gp.player.xWorld + gp.player.xScreen &&
+					worldY + gp.TILESIZE > gp.player.yWorld - gp.player.yScreen && worldY - gp.TILESIZE < gp.player.yWorld + gp.player.yScreen) {
+				g2.drawImage(tile[tileNum].image, screenX, screenY, gp.TILESIZE, gp.TILESIZE, null);
+			}
+
 			col++;
 
 			if(col == maxWorldCol) {				

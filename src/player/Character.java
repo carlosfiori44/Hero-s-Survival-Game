@@ -1,4 +1,4 @@
-package classe;
+package player;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -14,9 +14,9 @@ public class Character {
 	//Atributo que vai receber a imagem do personagem
 	protected BufferedImage image;
 	//Respectivos tamanho da imagem do personagem
-	protected int altura, largura;
+	protected final int ALTURA = 16, LARGURA = 16;
 	//Area que o personagem vai ocupar na tela
-	protected Rectangle solidArea;
+	protected Rectangle bounds;
 	
 	/**
 	 * Método utilizado para definir todas as imagens do personagem
@@ -25,11 +25,11 @@ public class Character {
 	}
 		
 	/**
-	 * Pega os limites de tamanho da imagem do personagem
-	 * @return retorna os tamnhos e localização da imagem do personagem no tipo Retangulo
+	 * Retorna os limites da imagem do personagem
+	 * @return retorna os tamanho da imagem do personagem
 	 */
-	public Rectangle limiteForma() {
-		return new Rectangle(xScreen, yScreen, largura, altura);
+	public Rectangle getBounds() {
+		return bounds;
 	}
 	
 	/**

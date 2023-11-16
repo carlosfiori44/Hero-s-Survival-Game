@@ -2,6 +2,7 @@ package Game;
 
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,10 +20,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import classe.Player;
 import item.SuperItem;
 import map.MapController;
 import map.MapTiles;
+import player.Player;
 
 public class GameController {
 	//Definindo o atributos das imagens de fundo
@@ -35,14 +36,12 @@ public class GameController {
 	private GamePanel gp;
 	private SuperItem item[];
 	private boolean dispose = false;
-	private MapTiles tile;
 
 	public GameController(MapController map, Player player, SuperItem item[], GamePanel gp) {
 		this.map = map;
 		this.player = player;
 		this.gp = gp;
 		this.item = item;
-		tile = new MapTiles(player);
 				
 		//Carrega as imagens referentes a menu, seja pausa ou menu principal
 		try {
@@ -53,6 +52,9 @@ public class GameController {
 
 			btPlay = new JButton(imagePlay);
 			btPlay.setBounds(btPlayBounds);
+			
+			//Chama o menu inicial
+			menu();			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -67,7 +69,8 @@ public class GameController {
 			public void actionPerformed(ActionEvent e) {
 				map.map = map.MAP_ISLAND;
 				gp.gameState = gp.PLAYSCREEN;
-				gp.remove(btPlay);				
+				gp.removeAll();				
+				gp.setPreferredSize(new Dimension(gp.SCRRENWIDTH, gp.SCREENHEIGHT));
 			}
 		});		
 		gp.add(btPlay);
@@ -92,20 +95,18 @@ public class GameController {
 		//Verifica se o estado do jogo é o menu inicial
 		if(gp.gameState == gp.TITLESCREEN) {			
 			g2.drawImage(menuInitial, 0, 0, null);
-			menu();
 			dispose = false;			
 		} 
 		
 		//Verifica se o estado do jogo é no modo jogável
 		if(gp.gameState == gp.PLAYSCREEN) {		
-			//map.draw(g2);
-			tile.draw(g2);			
+			map.draw(g2);			
 			
-			/*for(int i = 0; i < item.length; i++) {
+			for(int i = 0; i < item.length; i++) {
 				if(item[i] != null) {
-					item[i].draw(g2);
+					item[i].draw(g2, gp);
 				}
-			}*/
+			}
 			
 			player.draw(g2);			
 			

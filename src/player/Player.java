@@ -1,4 +1,4 @@
-package classe;
+package player;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -19,41 +19,74 @@ import map.MapController;
 public class Player extends Character {
 	PeripheralAdapter key;
 	//Velocidade do personagem
-	private final int VELOCIDADE = 15;
+	private final int VELOCIDADE = 10;
 	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda)
-	private BufferedImage down, down1, down2, up, up1, up2, right, right1, right2, left, left1, left2;
+	private BufferedImage down0, down1, down2, down3, down4;
+	private BufferedImage up0, up1, up2, up3, up4;
+	private BufferedImage right0, right1, right2, right3, right4;
+	private BufferedImage left0, left1, left2, left3, left4;
 	//Qual direção o personagem está virado
 	private char direction;
 	//Contagem para alteração da animação do personagem andando
 	private int spriteNum = 1, spriteCounter = 0;
 	//Definindo inventário do personagem
 	private List<SuperItem> item = new ArrayList<SuperItem>();
-
+	//Atributo referente ao painel da janela
+	private GamePanel gp;
+	
 	//Construtor
-	public Player(PeripheralAdapter key) {
+	public Player(PeripheralAdapter key, GamePanel gp) {
 		this.key = key;
+		this.gp = gp;
 		
-		xScreen = GamePanel.SCRRENWIDTH/2 - (GamePanel.TILESIZE/2);
-		yScreen = GamePanel.SCREENHEIGHT/2 - (GamePanel.TILESIZE/2);
+		xScreen = gp.SCRRENWIDTH/2 - (gp.TILESIZE/2);
+		yScreen = gp.SCREENHEIGHT/2 - (gp.TILESIZE/2);
 		
 		xWorld = 80*16;
-		yWorld = 15*16;
+		yWorld = 50*16;
 		
 		direction = 'd';
 		
 		try {
-			this.image = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
+			//this.image = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
+			this.image = ImageIO.read(getClass().getResourceAsStream("/player/Borg.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		
-		solidArea = new Rectangle();
+		bounds = new Rectangle(4, 4, 8, 8);
 	}
 
 	@Override
-	public void load() {		
+	public void load() {	
 		//Carreangdo as imagens de todas as direções do player 
+		down0 = image.getSubimage(0, 0, 16, 16);
+		down1 = image.getSubimage(16, 0, 16, 16);
+		down2 = image.getSubimage(32, 0, 16, 16);	
+		down3 = image.getSubimage(48, 0, 16, 16);	
+		down4 = image.getSubimage(64, 0, 16, 16);	
+
+		up0 = image.getSubimage(0, 16, 16, 16);
+		up1 = image.getSubimage(16, 16, 16, 16);
+		up2 = image.getSubimage(32, 16, 16, 16);
+		up3 = image.getSubimage(48, 16, 16, 16);
+		up4 = image.getSubimage(64, 16, 16, 16);
+
+		left0 = image.getSubimage(0, 32, 16, 16);
+		left1 = image.getSubimage(16, 32, 16, 16);
+		left2 = image.getSubimage(32, 32, 16, 16);		
+		left3 = image.getSubimage(48, 32, 16, 16);	
+		left4 = image.getSubimage(64, 32, 16, 16);	
+		
+		right0 = image.getSubimage(0, 48, 16, 16);	
+		right1 = image.getSubimage(16, 48, 16, 16);	
+		right2 = image.getSubimage(32, 48, 16, 16);	
+		right3 = image.getSubimage(48, 48, 16, 16);	
+		right4 = image.getSubimage(64, 48, 16, 16);	
+		
+		//Animações da imagem 'player.png
+		/*
 		altura = image.getSubimage(91, 131, 10, 16).getHeight();
 		largura = image.getSubimage(91, 131, 10, 16).getWidth();
 
@@ -76,7 +109,8 @@ public class Player extends Character {
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         left = op.filter(right, null);
         left1 = op.filter(right1, null);
-        left2 = op.filter(right2, null);                
+        left2 = op.filter(right2, null);     
+        */
 	}
  
 	/**
@@ -84,9 +118,9 @@ public class Player extends Character {
 	 * caminho de fato e atualiza as 'sprites' referentes a imagem do personagem andando
 	 */
 	public void update()  {
-		int yPlayer = yWorld + altura;
+		int yPlayer = yWorld + ALTURA;
 		int xPlayerLeft = xWorld;
-		int xPlayerRight = xWorld + largura;
+		int xPlayerRight = xWorld + LARGURA;
 		
 		
 		//if(key.down && MapController.isWalkable(xPlayerLeft, yPlayer+VELOCIDADE) && MapController.isWalkable(xPlayerRight, yPlayer+VELOCIDADE)) {
@@ -113,12 +147,18 @@ public class Player extends Character {
 		//Váriaveis de atualização das imagens de animação do personagem
 		if(key.down || key.up || key.right || key.left) {
 			spriteCounter++;
-			if(spriteCounter > 5) {
+			if(spriteCounter > 8) {
 				if(spriteNum == 1) {
 					spriteNum = 2;
 				} else if(spriteNum == 2) {
-					spriteNum = 1;
-				}
+					spriteNum = 3;
+				} else if(spriteNum == 3) {
+					spriteNum = 4;
+				}else if(spriteNum == 4) {
+					spriteNum = 5;
+				}else if(spriteNum == 5) {
+					spriteNum = 2;
+				}				
 				spriteCounter = 0;
 			}
 		}
@@ -129,7 +169,7 @@ public class Player extends Character {
 		switch(direction) {
 		case 'u':
 			if(spriteNum == 1) {
-				image = up;
+				image = up0;
 			}
 			if(spriteNum == 2) {
 				image = up1;
@@ -137,10 +177,16 @@ public class Player extends Character {
 			if(spriteNum == 3) {
 				image = up2;
 			}
+			if(spriteNum == 4) {
+				image = up3;
+			}
+			if(spriteNum == 5) {
+				image = up4;
+			}
 			break;
 		case 'd': 
 			if(spriteNum == 1) {
-				image = down;
+				image = down0;
 			}
 			if(spriteNum == 2) {
 				image = down1;
@@ -148,10 +194,16 @@ public class Player extends Character {
 			if(spriteNum == 3) {
 				image = down2;
 			}
+			if(spriteNum == 4) {
+				image = down3;
+			}
+			if(spriteNum == 5) {
+				image = down4;
+			}
 			break;
 		case 'l': 
 			if(spriteNum == 1) {
-				image = left;
+				image = left0;
 			}	
 			if(spriteNum == 2) {
 				image = left1;
@@ -159,10 +211,16 @@ public class Player extends Character {
 			if(spriteNum == 3) {
 				image = left2;
 			}
+			if(spriteNum == 4) {
+				image = left3;
+			}
+			if(spriteNum == 5) {
+				image = left4;
+			}
 			break;
 		case 'r':
 			if(spriteNum == 1) {
-				image = right;
+				image = right0;
 			}
 			if(spriteNum == 2) {
 				image = right1;
@@ -170,10 +228,16 @@ public class Player extends Character {
 			if(spriteNum == 3) {
 				image = right2;
 			}
+			if(spriteNum == 4) {
+				image = right3;
+			}
+			if(spriteNum == 5) {
+				image = right4;
+			}
 			break;
 		}		
 		
-		g2.drawImage(image, xScreen, yScreen, GamePanel.TILESIZE, GamePanel.TILESIZE, null);
+		g2.drawImage(image, xScreen, yScreen, gp.TILESIZE, gp.TILESIZE, null);
 		showItem(g2);
 	}
 	
@@ -183,15 +247,15 @@ public class Player extends Character {
 	 */
 	public void showItem(Graphics2D g2) {
 		for(SuperItem i : item){
-			int wid = i.getImage().getWidth()+2;
+			int wid = i.getImage().getWidth();
 			
 			i.setPositionX(1);
 			i.setPositionY(42);
 			
 
 			g2.setColor(Color.gray);
-			g2.fillRect(0, 41+i.getImage().getWidth(), wid, wid);
-			i.draw(g2);
+			g2.fillRect(0, 42+i.getImage().getWidth()*2, wid*2, wid*2);
+			g2.drawImage(i.getImage(), 0, 42, i.getImage().getWidth()*2, i.getImage().getHeight()*2, null);
 		}
 	}
 	

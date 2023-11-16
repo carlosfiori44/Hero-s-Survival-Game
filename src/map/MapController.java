@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import Game.GamePanel;
+
 public class MapController {
 	//Definindo o atributos das imagens de fundo
 	private BufferedImage map_Island_Image;
@@ -18,10 +20,12 @@ public class MapController {
 	public final int MAP_HOUSE = 1;
 	public final int MAP_CASTLE = 2;
 	//Definindo atributo referente a classe MapTiles para os mapas gerados
-	//MapTiles tile = new MapTiles();
+	MapTiles mapTile;
+	GamePanel gp;
 	
-	
-	public MapController() {
+	public MapController(GamePanel gp) {
+		this.gp = gp;
+		mapTile = new MapTiles(gp);
 	}
 	
 	/**
@@ -61,6 +65,7 @@ public class MapController {
 	 */
 	public void draw(Graphics2D g2) {	
 		if(map == MAP_ISLAND) {
+			mapTile.draw(g2);
 			//g2.drawImage(map_Island_Image, 0, 0, null);
 			//tile.draw(g2);
 		}

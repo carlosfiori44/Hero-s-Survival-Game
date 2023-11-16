@@ -10,10 +10,18 @@ public class SuperItem {
 	protected BufferedImage image;
 	protected String name;
 	protected boolean collision = false;
-	protected int positionX, positionY;
+	protected int worldX, worldY;
 	
-	public void draw(Graphics2D g2) {
-		g2.drawImage(image, positionX, positionY, null);
+	public void draw(Graphics2D g2, GamePanel gp) {	
+		//Pega as coordenadas atuais da janela, que é onde o player está no mapa
+		int	screenX = worldX - gp.player.xWorld + gp.player.xScreen;
+		int	screenY = worldY - gp.player.yWorld + gp.player.yScreen;
+
+		//Verifica se o bloco esta dentro dos limites da janela para que ele não renderize o mapa inteiro e economize desempenho
+		if(worldX + gp	.TILESIZE > gp.player.xWorld - gp.player.xScreen && worldX - gp.TILESIZE < gp.player.xWorld + gp.player.xScreen &&
+				worldY + gp.TILESIZE > gp.player.yWorld - gp.player.yScreen && worldY - gp.TILESIZE < gp.player.yWorld + gp.player.yScreen) {
+			g2.drawImage(image, screenX, screenY, gp.TILESIZE, gp.TILESIZE, null);
+		}
 	}
 	
 	/**
@@ -39,16 +47,16 @@ public class SuperItem {
 	 * @return Retorna um retangulo referente ao item
 	 */
 	public Rectangle getBounds() {
-		return new Rectangle(positionX, positionY, image.getWidth(), image.getHeight());
+		return new Rectangle(worldX, worldY, image.getWidth(), image.getHeight());
 	}
 	
 	//Getters e setters
 	public void setPositionX(int positionX) {
-		this.positionX = positionX;
+		this.worldX = positionX;
 	}
 
 	public void setPositionY(int positionY) {
-		this.positionY = positionY;
+		this.worldY = positionY;
 	}
 
 	public BufferedImage getImage() {
