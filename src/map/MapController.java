@@ -20,7 +20,7 @@ public class MapController {
 	public final int MAP_HOUSE = 1;
 	public final int MAP_CASTLE = 2;
 	//Definindo atributo referente a classe MapTiles para os mapas gerados
-	MapTiles mapTile;
+	public MapTiles mapTile;
 	GamePanel gp;
 	
 	public MapController(GamePanel gp) {

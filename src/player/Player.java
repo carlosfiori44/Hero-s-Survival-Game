@@ -18,8 +18,6 @@ import map.MapController;
 
 public class Player extends Character {
 	PeripheralAdapter key;
-	//Velocidade do personagem
-	private final int VELOCIDADE = 10;
 	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda)
 	private BufferedImage down0, down1, down2, down3, down4;
 	private BufferedImage up0, up1, up2, up3, up4;
@@ -30,32 +28,33 @@ public class Player extends Character {
 	//Contagem para alteração da animação do personagem andando
 	private int spriteNum = 1, spriteCounter = 0;
 	//Definindo inventário do personagem
-	private List<SuperItem> item = new ArrayList<SuperItem>();
-	//Atributo referente ao painel da janela
-	private GamePanel gp;
-	
+	public List<SuperItem> item = new ArrayList<SuperItem>();
+
 	//Construtor
 	public Player(PeripheralAdapter key, GamePanel gp) {
 		this.key = key;
 		this.gp = gp;
-		
-		xScreen = gp.SCRRENWIDTH/2 - (gp.TILESIZE/2);
-		yScreen = gp.SCREENHEIGHT/2 - (gp.TILESIZE/2);
-		
-		xWorld = 80*16;
-		yWorld = 50*16;
-		
+
+		xScreen = (gp.SCRRENWIDTH/2) - (gp.TILESIZE/2);
+		yScreen = (gp.SCREENHEIGHT/2) - (gp.TILESIZE/2);
+
+		xWorld = 25*16*5;
+		yWorld = 2*16*5;
+
 		direction = 'd';
+
+		bounds = new Rectangle();		
+		bounds.height = 11*gp.SCALE;
+		bounds.width = 8*gp.SCALE;
+		bounds.x = 4*gp.SCALE;
+		bounds.y = 4*gp.SCALE;
 		
 		try {
 			//this.image = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
 			this.image = ImageIO.read(getClass().getResourceAsStream("/player/Borg.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
-		
-		bounds = new Rectangle(4, 4, 8, 8);
+		}		
 	}
 
 	@Override
@@ -66,7 +65,7 @@ public class Player extends Character {
 		down2 = image.getSubimage(32, 0, 16, 16);	
 		down3 = image.getSubimage(48, 0, 16, 16);	
 		down4 = image.getSubimage(64, 0, 16, 16);	
-
+		
 		up0 = image.getSubimage(0, 16, 16, 16);
 		up1 = image.getSubimage(16, 16, 16, 16);
 		up2 = image.getSubimage(32, 16, 16, 16);
@@ -78,13 +77,13 @@ public class Player extends Character {
 		left2 = image.getSubimage(32, 32, 16, 16);		
 		left3 = image.getSubimage(48, 32, 16, 16);	
 		left4 = image.getSubimage(64, 32, 16, 16);	
-		
+
 		right0 = image.getSubimage(0, 48, 16, 16);	
 		right1 = image.getSubimage(16, 48, 16, 16);	
 		right2 = image.getSubimage(32, 48, 16, 16);	
 		right3 = image.getSubimage(48, 48, 16, 16);	
 		right4 = image.getSubimage(64, 48, 16, 16);	
-		
+
 		//Animações da imagem 'player.png
 		/*
 		altura = image.getSubimage(91, 131, 10, 16).getHeight();
@@ -101,7 +100,7 @@ public class Player extends Character {
 		right = image.getSubimage(92, 169, 10, 16);
 		right1 = image.getSubimage(77, 169, 10, 16);
 		right2 = image.getSubimage(105, 169, 10, 16);		
-		
+
 		//Classes e métodos que fazem a imagem do personagem indo para a direita inverter
 		//e assim animar como se estivesse indo para a esquerda
 		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
@@ -110,40 +109,48 @@ public class Player extends Character {
         left = op.filter(right, null);
         left1 = op.filter(right1, null);
         left2 = op.filter(right2, null);     
-        */
+		 */
 	}
- 
+
 	/**
 	 * Faz a atualização das coordenadas do personagem de acordo com a velocidade definida e verificar se é um
 	 * caminho de fato e atualiza as 'sprites' referentes a imagem do personagem andando
 	 */
 	public void update()  {
-		int yPlayer = yWorld + ALTURA;
-		int xPlayerLeft = xWorld;
-		int xPlayerRight = xWorld + LARGURA;
-		
-		
-		//if(key.down && MapController.isWalkable(xPlayerLeft, yPlayer+VELOCIDADE) && MapController.isWalkable(xPlayerRight, yPlayer+VELOCIDADE)) {
 		if(key.down) {
-			yWorld+=VELOCIDADE; 
 			direction = 'd';
+
+			if(checkCollision(direction)) {
+				yWorld+=VELOCIDADE; 
+			}
 		} 
-		//if(key.up && MapController.isWalkable(xPlayerLeft, yPlayer-VELOCIDADE) && MapController.isWalkable(xPlayerRight, yPlayer-VELOCIDADE)) {
+
 		if(key.up) {
-			yWorld-=VELOCIDADE; 
 			direction = 'u';
-		}		
-		//if(key.left && MapController.isWalkable(xPlayerLeft+VELOCIDADE, yPlayer+VELOCIDADE)) {
+
+			if(checkCollision(direction)) {
+				yWorld-=VELOCIDADE;		
+			}
+		}	
+
 		if(key.left) {
-			xWorld-=VELOCIDADE; 
 			direction = 'l';
+
+			if(checkCollision(direction)) {
+				xWorld-=VELOCIDADE; 	
+			}
 		}
-		//if(key.right && MapController.isWalkable(xPlayerRight-VELOCIDADE, yPlayer)) {
+
 		if(key.right) {
-			xWorld+=VELOCIDADE; 
 			direction = 'r';
+			
+			if(checkCollision(direction)) {
+				xWorld+=VELOCIDADE; 	
+			}
 		}
-	
+
+
+
 		//Váriaveis de atualização das imagens de animação do personagem
 		if(key.down || key.up || key.right || key.left) {
 			spriteCounter++;
@@ -236,11 +243,11 @@ public class Player extends Character {
 			}
 			break;
 		}		
-		
+
 		g2.drawImage(image, xScreen, yScreen, gp.TILESIZE, gp.TILESIZE, null);
 		showItem(g2);
 	}
-	
+
 	/**
 	 * Mostra os itens dentro do invetário do personagem 
 	 * @param g2 recebe o componente gráfico do tipo Graphics2D para adicionalo a tela
@@ -248,27 +255,27 @@ public class Player extends Character {
 	public void showItem(Graphics2D g2) {
 		for(SuperItem i : item){
 			int wid = i.getImage().getWidth();
-			
+
 			i.setPositionX(1);
 			i.setPositionY(42);
-			
 
 			g2.setColor(Color.gray);
 			g2.fillRect(0, 42+i.getImage().getWidth()*2, wid*2, wid*2);
 			g2.drawImage(i.getImage(), 0, 42, i.getImage().getWidth()*2, i.getImage().getHeight()*2, null);
 		}
 	}
-	
+
 	/**
 	 * Adiciona o item que o usuário pegou próximo a ele
 	 * @param item item que o usuário pegou
 	 */
-	public void addItem(SuperItem item) {
-		if(this.item.size() != 5) {
+	public boolean addItem(SuperItem item) {
+		if(this.item.size() < 2) {
 			this.item.add(item);	
-			return;			
+			return true;			
 		}
 
 		System.out.println("Inventário cheio");
+		return false;
 	}		
 }

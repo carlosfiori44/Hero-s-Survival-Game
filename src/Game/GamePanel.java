@@ -1,6 +1,6 @@
 package Game;
 
-	import java.awt.Dimension;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//Criando objeto do tipo Character
 	public Player player = new Player(peripheral, this); 
 	//Classe que projeta o background
-	private MapController map = new MapController(this);
+	public MapController map = new MapController(this);
 	//Definindo a Thread
 	private Thread gameThread;	
 	//Frames por segundo
@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public SuperItem item[] = new SuperItem[4];	
 	//Classe que faz o controle entre menu, itens, personagens e mapas
 	private GameController gameC = new GameController(map, player, item, this); 	
-	
+
 	/**
 	 * Método construtor da clase Fase, utilizada quando a mesma é instanciada
 	 * @param background recebe o diretorio da imagem de fundo da tela
@@ -50,11 +50,11 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setDoubleBuffered(true);
 		this.setLayout(null);	
 		this.addKeyListener(peripheral);	
-			
+
 		player.load();			
 		map.load();		
 	}
-	
+
 	/**
 	 * Inicializa as primeira configurações do jogo
 	 */
@@ -77,7 +77,7 @@ public class GamePanel extends JPanel implements Runnable {
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
-		
+
 		while(gameThread != null) { 			
 			currentTime = System.nanoTime();
 			delta += (currentTime - lastTime) / drawInterval;
@@ -90,19 +90,20 @@ public class GamePanel extends JPanel implements Runnable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Atualiza a localização dos objetos
 	 */
 	public void update() {
 		if(gameState == PLAYSCREEN) {
 			player.update();	
-			
+
 			if(peripheral.action) {
 				for(int i = 0; i < item.length; i++) {
 					if(item[i] != null && item[i].findItem(new Rectangle(player.xWorld, player.yWorld, TILESIZE, TILESIZE))) {
-						player.addItem(item[i]);
-						item[i] = null;
+						if(player.addItem(item[i])) {
+							item[i] = null;
+						}
 					};
 				}
 			}

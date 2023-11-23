@@ -14,8 +14,8 @@ public class SetItem {
 	 */
 	public void setItem(){
 		gp.item[0] = new Item_Sword();
-		gp.item[0].worldX = 81*16;
-		gp.item[0].worldY = 50*16;
+		gp.item[0].worldX = 27*16*5;
+		gp.item[0].worldY = 2*16*5;
 
 	}
 }
