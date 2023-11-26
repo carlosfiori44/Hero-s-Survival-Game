@@ -39,7 +39,7 @@ public class Player extends Character {
 		yScreen = (gp.SCREENHEIGHT/2) - (gp.TILESIZE/2);
 
 		xWorld = 25*16*5;
-		yWorld = 2*16*5;
+		yWorld = 3*16*5;
 
 		direction = 'd';
 
