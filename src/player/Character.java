@@ -10,6 +10,9 @@ import javax.imageio.ImageIO;
 
 import Game.GamePanel;
 
+/**
+ * Classe mãe/superclasse para todos os personagens do jogo
+ */
 public class Character {
 	//Declarando atributos utilizados em cada personagem
 	public int xScreen, yScreen, xWorld, yWorld;
@@ -73,46 +76,108 @@ public class Character {
 		int topRowY = topWorldY/gp.TILESIZE;
 		int bottomRowY = bottomWorldY/gp.TILESIZE;
 
-		int tile1, tile2;
+		int tileM1, tileM2, tileC1, tileC2;
 		
 		boolean collision = true;
 		
 		switch(direction) {
 		case 'u': 
 			topRowY = (topWorldY - VELOCIDADE)/gp.TILESIZE;
-			tile1 = gp.map.mapTile.mapTilePosition[leftColX][topRowY];
-			tile2 = gp.map.mapTile.mapTilePosition[rightColX][topRowY];
 			
-			if(gp.map.mapTile.mapTile[tile1].collision == true || gp.map.mapTile.mapTile[tile2].collision == true) {
+			tileM1 = gp.map.mapTile.mapTilePosition[leftColX][topRowY];
+			tileM2 = gp.map.mapTile.mapTilePosition[rightColX][topRowY];
+			
+			tileC1 = gp.map.mapTile.construcTilePosition[leftColX][topRowY];
+			tileC2 = gp.map.mapTile.construcTilePosition[rightColX][topRowY];
+			
+			if(gp.map.mapTile.mapTile[tileM1].collision || gp.map.mapTile.mapTile[tileM2].collision) {
 				collision = false;
 			}			
+			
+			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
+				if(gp.map.mapTile.constructionTile[tileC1].collision) {
+					collision = false;	
+				}	
+			} else if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+				if(gp.map.mapTile.constructionTile[tileC2].collision) {
+					collision = false;	
+				}						
+			}
+			
 			break;
+			
 		case 'd':
 			bottomRowY = (bottomWorldY + VELOCIDADE)/gp.TILESIZE;
-			tile1 = gp.map.mapTile.mapTilePosition[leftColX][bottomRowY];
-			tile2 = gp.map.mapTile.mapTilePosition[rightColX][bottomRowY];
 			
-			if(gp.map.mapTile.mapTile[tile1].collision == true || gp.map.mapTile.mapTile[tile2].collision == true) {
+			tileM1 = gp.map.mapTile.mapTilePosition[leftColX][bottomRowY];
+			tileM2 = gp.map.mapTile.mapTilePosition[rightColX][bottomRowY];
+			
+			tileC1 = gp.map.mapTile.construcTilePosition[leftColX][bottomRowY];
+			tileC2 = gp.map.mapTile.construcTilePosition[rightColX][bottomRowY];
+			
+			if(gp.map.mapTile.mapTile[tileM1].collision || gp.map.mapTile.mapTile[tileM2].collision) {
 				collision = false;
 			}	
+			
+			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
+				if(gp.map.mapTile.constructionTile[tileC1].collision) {
+					collision = false;	
+				}	
+			} else if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+				if(gp.map.mapTile.constructionTile[tileC2].collision) {
+					collision = false;	
+				}						
+			}
+			
 			break;
+			
 		case 'l':
 			leftColX = (leftWorldX - VELOCIDADE)/gp.TILESIZE;
-			tile1 = gp.map.mapTile.mapTilePosition[leftColX][topRowY];
-			tile2 = gp.map.mapTile.mapTilePosition[leftColX][bottomRowY];
 			
-			if(gp.map.mapTile.mapTile[tile1].collision == true || gp.map.mapTile.mapTile[tile2].collision == true) {
+			tileM1 = gp.map.mapTile.mapTilePosition[leftColX][topRowY];
+			tileM2 = gp.map.mapTile.mapTilePosition[leftColX][bottomRowY];
+			
+			tileC1 = gp.map.mapTile.construcTilePosition[leftColX][topRowY];
+			tileC2 = gp.map.mapTile.construcTilePosition[leftColX][bottomRowY];
+			
+			if(gp.map.mapTile.mapTile[tileM1].collision || gp.map.mapTile.mapTile[tileM2].collision) {
 				collision = false;
 			}	
+			
+			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
+				if(gp.map.mapTile.constructionTile[tileC1].collision) {
+					collision = false;	
+				}	
+			} else if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+				if(gp.map.mapTile.constructionTile[tileC2].collision) {
+					collision = false;	
+				}						
+			}
+			
 			break;
+			
 		case 'r':
 			rightColX = (rightWorldX + VELOCIDADE)/gp.TILESIZE;
-			tile1 = gp.map.mapTile.mapTilePosition[rightColX][topRowY];
-			tile2 = gp.map.mapTile.mapTilePosition[rightColX][bottomRowY];
+			tileM1 = gp.map.mapTile.mapTilePosition[rightColX][topRowY];
+			tileM2 = gp.map.mapTile.mapTilePosition[rightColX][bottomRowY];
 			
-			if(gp.map.mapTile.mapTile[tile1].collision == true || gp.map.mapTile.mapTile[tile2].collision == true) {
-				collision = false;
-			}	
+			tileC1 = gp.map.mapTile.construcTilePosition[rightColX][topRowY];
+			tileC2 = gp.map.mapTile.construcTilePosition[rightColX][bottomRowY];
+			
+			if(gp.map.mapTile.mapTile[tileM1].collision || gp.map.mapTile.mapTile[tileM2].collision) {
+				collision = false;	
+			} 
+			
+			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
+				if(gp.map.mapTile.constructionTile[tileC1].collision) {
+					collision = false;	
+				}	
+			} else if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+				if(gp.map.mapTile.constructionTile[tileC2].collision) {
+					collision = false;	
+				}						
+			}
+			
 			break;
 		}
 

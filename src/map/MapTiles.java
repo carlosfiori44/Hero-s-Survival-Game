@@ -18,7 +18,7 @@ public class MapTiles {
 	//Definindo atributos
 	private GamePanel gp;
 	public Tile[] mapTile, constructionTile;
-	private int numTile = 300;
+	public int numTile = 300;
 	private BufferedImage allTileImage, allConstructionImage;
 	public int mapTilePosition[][];
 	public int construcTilePosition[][];
@@ -65,7 +65,7 @@ public class MapTiles {
 			for(int col = 0; col < allTileImage.getWidth(); col+=16) {
 				mapTile[numImage].image = allTileImage.getSubimage(col, row, 16, 16);
 				numImage++;
-			}			
+			}				
 		}
 
 		numImage = 0;
@@ -86,6 +86,9 @@ public class MapTiles {
 		mapTile[16].collision = true;
 		mapTile[17].collision = true;
 		mapTile[18].collision = true;
+		
+		//Alterando colisão dos blocos de construção, para aqueles que são passáveis
+		constructionTile[148].collision = false;
 
 	}
 

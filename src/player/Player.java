@@ -30,7 +30,11 @@ public class Player extends Character {
 	//Definindo inventário do personagem
 	public List<SuperItem> item = new ArrayList<SuperItem>();
 
-	//Construtor
+	/**
+	 * Construtor da classe Player
+	 * @param key Classe que faz a leitura das teclas pressionadas para que o seja feita alguma ação
+	 * @param gp Classe JPanel que todo o jogo é executado
+	 */
 	public Player(PeripheralAdapter key, GamePanel gp) {
 		this.key = key;
 		this.gp = gp;
