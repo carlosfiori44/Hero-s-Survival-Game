@@ -98,7 +98,9 @@ public class Character {
 				if(gp.map.mapTile.constructionTile[tileC1].collision) {
 					collision = false;	
 				}	
-			} else if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+			} 
+			
+			if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
 				if(gp.map.mapTile.constructionTile[tileC2].collision) {
 					collision = false;	
 				}						
@@ -120,14 +122,19 @@ public class Character {
 			}	
 			
 			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
+				System.out.println("1: " + gp.map.mapTile.constructionTile[tileC1].collision);
 				if(gp.map.mapTile.constructionTile[tileC1].collision) {
 					collision = false;	
 				}	
-			} else if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+			} 
+			
+			if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+				System.out.println("2: " + gp.map.mapTile.constructionTile[tileC2].collision);
 				if(gp.map.mapTile.constructionTile[tileC2].collision) {
 					collision = false;	
 				}						
-			}
+				
+			}	
 			
 			break;
 			
@@ -148,7 +155,9 @@ public class Character {
 				if(gp.map.mapTile.constructionTile[tileC1].collision) {
 					collision = false;	
 				}	
-			} else if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+			} 
+			
+			if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
 				if(gp.map.mapTile.constructionTile[tileC2].collision) {
 					collision = false;	
 				}						
@@ -158,6 +167,7 @@ public class Character {
 			
 		case 'r':
 			rightColX = (rightWorldX + VELOCIDADE)/gp.TILESIZE;
+			
 			tileM1 = gp.map.mapTile.mapTilePosition[rightColX][topRowY];
 			tileM2 = gp.map.mapTile.mapTilePosition[rightColX][bottomRowY];
 			
@@ -172,7 +182,9 @@ public class Character {
 				if(gp.map.mapTile.constructionTile[tileC1].collision) {
 					collision = false;	
 				}	
-			} else if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
+			} 
+			
+			if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
 				if(gp.map.mapTile.constructionTile[tileC2].collision) {
 					collision = false;	
 				}						

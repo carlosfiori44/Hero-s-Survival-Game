@@ -100,7 +100,7 @@ public class MapTiles {
 	public void loadMap() {
 		try {
 			InputStream arrayMap = getClass().getResourceAsStream("/background/tileWorldMap.txt");
-			InputStream arrayConstr = getClass().getResourceAsStream("/construction/constructionWorldMap");
+			InputStream arrayConstr = getClass().getResourceAsStream("/construction/constructionWorldMap.txt");
 
 			BufferedReader brMap = new BufferedReader(new InputStreamReader(arrayMap));
 			BufferedReader brConstr = new BufferedReader(new InputStreamReader(arrayConstr));
