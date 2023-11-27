@@ -57,8 +57,8 @@ public class Character {
 	 * @param y coordenada vertical da tela
 	 */
 	public void setPosition(int x, int y) {
-		this.xScreen = x;
-		this.yScreen = y;
+		this.xWorld = x;
+		this.yWorld = y;
 	}
 
 	/**

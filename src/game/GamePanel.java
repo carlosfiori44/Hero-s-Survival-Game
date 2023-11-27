@@ -38,9 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//Definindo classe de itens, 'inventário de itens' e localização de itens
 	public SetItem setItem = new SetItem(this);
 	public SuperItem item[] = new SuperItem[4];	
-	//Classe que faz o controle entre menu, itens, personagens e mapas
-	private GameStateControl gameC = new GameStateControl(map, this); 	
-	//Classe referente as mensagens que vão aparecer na tela
+	//Classe referente as mensagens e menus que vão aparecer na tela
 	public UserInterface ui = new UserInterface(this);
 
 	/**
@@ -108,13 +106,12 @@ public class GamePanel extends JPanel implements Runnable {
 	 */ 
 	public void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;	
-		
 
-		//Verifica se o estado do jogo é o menu inicial
+		//Verifica se o estado do jogo é o menu inici
 		if(gameState == TITLESCREEN) {			
 			graphics.setColor(Color.black);
 			graphics.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
-			graphics.drawImage(gameC.menuInitial, SCREENWIDTH/2 - gameC.menuInitial.getWidth()/2, SCREENHEIGHT/2 - gameC.menuInitial.getHeight()/2, null);
+			graphics.drawImage(ui.menuInitial, SCREENWIDTH/2 - ui.menuInitial.getWidth()/2, SCREENHEIGHT/2 - ui.menuInitial.getHeight()/2, null);
 		} 
 
 		//Verifica se o estado do jogo é no modo jogável
@@ -135,7 +132,8 @@ public class GamePanel extends JPanel implements Runnable {
 
 		//Verifica se o jogo está pausado
 		if(gameState == PAUSESCREEN) {
-			gameC.drawPause(graphics);
+			ui.drawPause(graphics);
+			g.dispose();
 		}
 	}
 }
