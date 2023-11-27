@@ -33,6 +33,10 @@ public class Character {
 	//Definindo inventário do personagem
 	public List<SuperItem> item = new ArrayList<SuperItem>();
 
+	public Character(GamePanel gp) {
+		this.gp = gp;
+	}
+	
 	/**
 	 * Método utilizado para definir todas as imagens do personagem
 	 */

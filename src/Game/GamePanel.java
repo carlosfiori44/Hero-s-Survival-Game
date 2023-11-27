@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//Atributos do tamanho da tela e blocos (tiles)
 	public final int DEFAULTTILESIZE = 16, SCALE = 5;
 	public final int TILESIZE = DEFAULTTILESIZE * SCALE;
-	public final int MAXSCREENCOL = 12, MAXSCREENROW = 10;
+	public final int MAXSCREENCOL = 12, MAXSCREENROW = 8;
 	public final int SCREENHEIGHT = TILESIZE * MAXSCREENROW, SCREENWIDTH = TILESIZE * MAXSCREENCOL;
 	//Classe que lê as teclas pressionadas
 	private PeripheralAdapter peripheral = new PeripheralAdapter(this);

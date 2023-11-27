@@ -34,14 +34,15 @@ public class Player extends Character {
 	 * @param gp Classe JPanel que todo o jogo é executado
 	 */
 	public Player(PeripheralAdapter key, GamePanel gp) {
+		super(gp);
 		this.key = key;
-		this.gp = gp;
+		
 
 		xScreen = (gp.SCREENWIDTH/2) - (gp.TILESIZE/2);
 		yScreen = (gp.SCREENHEIGHT/2) - (gp.TILESIZE/2);
 
-		xWorld = 25*16*5;
-		yWorld = 5*16*5;
+		xWorld = 25*gp.TILESIZE;
+		yWorld = 5*gp.TILESIZE;
 
 		direction = 'd';
 

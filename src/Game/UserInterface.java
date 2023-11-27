@@ -70,7 +70,7 @@ public class UserInterface {
 
 			//Temporizador do jogo
 			timer += (double) 1/60;
-			g2.drawString("Tempo: " + timerFormat.format(timer), (int) (gp.SCREENHEIGHT - g2.getFontMetrics().getStringBounds("Tempo: " + timerFormat.format(timer), g2).getWidth()/2), 40);
+			g2.drawString("Tempo: " + timerFormat.format(timer), (int) (gp.SCREENWIDTH - g2.getFontMetrics().getStringBounds("Tempo: " + timerFormat.format(timer), g2).getWidth()*1.5), 40);
 			
 			//Mesnagem que aparece na tela 
 			if(messageVisible) {
