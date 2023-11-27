@@ -37,11 +37,11 @@ public class Player extends Character {
 		this.key = key;
 		this.gp = gp;
 
-		xScreen = (gp.SCRRENWIDTH/2) - (gp.TILESIZE/2);
+		xScreen = (gp.SCREENWIDTH/2) - (gp.TILESIZE/2);
 		yScreen = (gp.SCREENHEIGHT/2) - (gp.TILESIZE/2);
 
 		xWorld = 25*16*5;
-		yWorld = 3*16*5;
+		yWorld = 5*16*5;
 
 		direction = 'd';
 

@@ -34,7 +34,6 @@ public class GameStateControl {
 	private MapController map;
 	private GamePanel gp;
 
-
 	public GameStateControl(MapController map, GamePanel gp) {
 		this.map = map;
 		this.gp = gp;
@@ -43,7 +42,7 @@ public class GameStateControl {
 		try {
 			menuInitial = ImageIO.read(getClass().getResource("/startScreen/title.png"));
 			imagePlay = new ImageIcon("res//startScreen//btJogar.png");
-			btPlayBounds = new Rectangle(350, 280, imagePlay.getImage().getWidth(null), imagePlay.getImage().getHeight(null));	
+			btPlayBounds = new Rectangle(gp.SCREENWIDTH/2, gp.SCREENHEIGHT/2, imagePlay.getImage().getWidth(null), imagePlay.getImage().getHeight(null));	
 
 			btPlay = new JButton(imagePlay);
 			btPlay.setBounds(btPlayBounds);

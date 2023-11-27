@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,8 +18,8 @@ public class GamePanel extends JPanel implements Runnable {
 	//Atributos do tamanho da tela e blocos (tiles)
 	public final int DEFAULTTILESIZE = 16, SCALE = 5;
 	public final int TILESIZE = DEFAULTTILESIZE * SCALE;
-	public final int MAXSCREENCOL = 9, MAXSCREENROW = 7;
-	public final int SCREENHEIGHT = TILESIZE * MAXSCREENROW, SCRRENWIDTH = TILESIZE * MAXSCREENCOL;
+	public final int MAXSCREENCOL = 12, MAXSCREENROW = 10;
+	public final int SCREENHEIGHT = TILESIZE * MAXSCREENROW, SCREENWIDTH = TILESIZE * MAXSCREENCOL;
 	//Classe que lê as teclas pressionadas
 	private PeripheralAdapter peripheral = new PeripheralAdapter(this);
 	//Criando objeto do tipo Character
@@ -26,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//Classe que projeta o background
 	public MapController map = new MapController(this);
 	//Definindo a Thread
-	private Thread gameThread;	
+	public Thread gameThread;	
 	//Frames por segundo
 	private final int FPS = 60;
 	//Estado atual do jogo
@@ -40,14 +41,14 @@ public class GamePanel extends JPanel implements Runnable {
 	//Classe que faz o controle entre menu, itens, personagens e mapas
 	private GameStateControl gameC = new GameStateControl(map, this); 	
 	//Classe referente as mensagens que vão aparecer na tela
-	UserInterface ui = new UserInterface(this);
+	public UserInterface ui = new UserInterface(this);
 
 	/**
 	 * Método construtor da clase Fase, utilizada quando a mesma é instanciada
 	 * @param background recebe o diretorio da imagem de fundo da tela
 	 */
 	public GamePanel() {
-		this.setPreferredSize(new Dimension(SCRRENWIDTH, SCREENHEIGHT));
+		this.setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
 		this.setFocusable(true);
 		this.setDoubleBuffered(true);
 		this.setLayout(null);	
@@ -106,33 +107,35 @@ public class GamePanel extends JPanel implements Runnable {
 	 * Coloca as imagem dos objetos dentro da tela, por meio do objeto do tipo Graphics
 	 */ 
 	public void paintComponent(Graphics g) {
-		Graphics2D graficos = (Graphics2D) g;	
+		Graphics2D graphics = (Graphics2D) g;	
 		
 
 		//Verifica se o estado do jogo é o menu inicial
 		if(gameState == TITLESCREEN) {			
-			graficos.drawImage(gameC.menuInitial, 0, 0, null);
+			graphics.setColor(Color.black);
+			graphics.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
+			graphics.drawImage(gameC.menuInitial, SCREENWIDTH/2 - gameC.menuInitial.getWidth()/2, SCREENHEIGHT/2 - gameC.menuInitial.getHeight()/2, null);
 		} 
 
 		//Verifica se o estado do jogo é no modo jogável
 		if(gameState == PLAYSCREEN) {		
-			map.draw(graficos);			
+			map.draw(graphics);			
 
 			for(int i = 0; i < item.length; i++) {
 				if(item[i] != null) {
-					item[i].draw(graficos);
+					item[i].draw(graphics);
 				}				
 			}
 			
-			player.draw(graficos);	
-			ui.draw(graficos);
+			player.draw(graphics);	
+			ui.draw(graphics);
 			
 			g.dispose();
 		}
 
 		//Verifica se o jogo está pausado
 		if(gameState == PAUSESCREEN) {
-			gameC.drawPause(graficos);
+			gameC.drawPause(graphics);
 		}
 	}
 }

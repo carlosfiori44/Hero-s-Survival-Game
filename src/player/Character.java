@@ -207,6 +207,7 @@ public class Character {
 			if(gp.item[i] != null && gp.item[i].findItem(new Rectangle(xWorld, yWorld, gp.TILESIZE, gp.TILESIZE))) {
 				if(addItem(gp.item[i])) {
 					gp.item[i] = null;
+					gp.ui.setMessage("Você pegou um item!");
 				}
 			}
 		}		
@@ -233,7 +234,7 @@ public class Character {
 	 * @param g2 recebe o componente gráfico do tipo Graphics2D para adicionalo a tela
 	 */
 	public void showItem(Graphics2D g2) {
-		int positionY = 4;
+		int positionY = 50;
 		
 		for(SuperItem i : item){
 			i.setPositionX(1);
