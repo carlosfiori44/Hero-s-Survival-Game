@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import Game.GamePanel;
+import game.GamePanel;
 import player.Player;
 
 public class MapTiles {
@@ -89,7 +89,7 @@ public class MapTiles {
 		
 		//Alterando colisão dos blocos de construção, para aqueles que são passáveis
 		constructionTile[148].collision = false;
-
+		constructionTile[70].collision = false;
 	}
 
 

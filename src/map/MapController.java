@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import Game.GamePanel;
+import game.GamePanel;
 
 public class MapController {
 	//Definindo o atributos das imagens de fundo

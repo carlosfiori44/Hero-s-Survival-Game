@@ -1,6 +1,6 @@
 package item;
 
-import Game.GamePanel;
+import game.GamePanel;
 
 public class SetItem {
 	private GamePanel gp;
@@ -13,7 +13,7 @@ public class SetItem {
 	 * Define a posição do item na tela
 	 */
 	public void setItem(){
-		gp.item[0] = new Item_Sword();
+		gp.item[0] = new BuffDamage(gp);
 		gp.item[0].worldX = 27*16*5;
 		gp.item[0].worldY = 3*16*5;
 

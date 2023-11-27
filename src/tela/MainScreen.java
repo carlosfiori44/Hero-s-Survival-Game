@@ -4,8 +4,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Game.GameController;
-import Game.GamePanel;
+import game.GamePanel;
+import game.GameStateControl;
 
 public class MainScreen extends JFrame {
 	

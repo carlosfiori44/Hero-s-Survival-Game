@@ -1,4 +1,4 @@
-package Game;
+package game;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -38,7 +38,9 @@ public class GamePanel extends JPanel implements Runnable {
 	public SetItem setItem = new SetItem(this);
 	public SuperItem item[] = new SuperItem[4];	
 	//Classe que faz o controle entre menu, itens, personagens e mapas
-	private GameController gameC = new GameController(map, player, item, this); 	
+	private GameStateControl gameC = new GameStateControl(map, this); 	
+	//Classe referente as mensagens que vão aparecer na tela
+	UserInterface ui = new UserInterface(this);
 
 	/**
 	 * Método construtor da clase Fase, utilizada quando a mesma é instanciada
@@ -92,29 +94,45 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Atualiza a localização dos objetos
+	 * Atualiza a localização dos objetos na tela
 	 */
 	public void update() {
 		if(gameState == PLAYSCREEN) {
-			player.update();	
-
-			if(peripheral.action) {
-				for(int i = 0; i < item.length; i++) {
-					if(item[i] != null && item[i].findItem(new Rectangle(player.xWorld, player.yWorld, TILESIZE, TILESIZE))) {
-						if(player.addItem(item[i])) {
-							item[i] = null;
-						}
-					};
-				}
-			}
+			player.update();				
 		} 					
 	}
 
 	/**
-	 * Coloca as imagem dos objetos dentro da tela, como por exemplo o personagem
+	 * Coloca as imagem dos objetos dentro da tela, por meio do objeto do tipo Graphics
 	 */ 
 	public void paintComponent(Graphics g) {
 		Graphics2D graficos = (Graphics2D) g;	
-		if(gameC.draw(graficos)) g.dispose();
+		
+
+		//Verifica se o estado do jogo é o menu inicial
+		if(gameState == TITLESCREEN) {			
+			graficos.drawImage(gameC.menuInitial, 0, 0, null);
+		} 
+
+		//Verifica se o estado do jogo é no modo jogável
+		if(gameState == PLAYSCREEN) {		
+			map.draw(graficos);			
+
+			for(int i = 0; i < item.length; i++) {
+				if(item[i] != null) {
+					item[i].draw(graficos);
+				}				
+			}
+			
+			player.draw(graficos);	
+			ui.draw(graficos);
+			
+			g.dispose();
+		}
+
+		//Verifica se o jogo está pausado
+		if(gameState == PAUSESCREEN) {
+			gameC.drawPause(graficos);
+		}
 	}
 }

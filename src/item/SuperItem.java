@@ -4,15 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import Game.GamePanel;
+import game.GamePanel;
 
 public class SuperItem {
 	protected BufferedImage image;
 	protected String name;
 	protected boolean collision = false;
 	protected int worldX, worldY;
+	protected GamePanel gp;
 	
-	public void draw(Graphics2D g2, GamePanel gp) {	
+	public void draw(Graphics2D g2) {	
 		//Pega as coordenadas atuais da janela, que é onde o player está no mapa
 		int	screenX = worldX - gp.player.xWorld + gp.player.xScreen;
 		int	screenY = worldY - gp.player.yWorld + gp.player.yScreen;
@@ -20,7 +21,7 @@ public class SuperItem {
 		//Verifica se o bloco esta dentro dos limites da janela para que ele não renderize o mapa inteiro e economize desempenho
 		if(worldX + gp	.TILESIZE > gp.player.xWorld - gp.player.xScreen && worldX - gp.TILESIZE < gp.player.xWorld + gp.player.xScreen &&
 				worldY + gp.TILESIZE > gp.player.yWorld - gp.player.yScreen && worldY - gp.TILESIZE < gp.player.yWorld + gp.player.yScreen) {
-			g2.drawImage(image, screenX, screenY, 8*5, gp.TILESIZE, null);
+			g2.drawImage(image, screenX, screenY, gp.TILESIZE, gp.TILESIZE, null);
 		}
 	}
 	
@@ -47,7 +48,7 @@ public class SuperItem {
 	 * @return Retorna um retangulo referente ao item
 	 */
 	public Rectangle getBounds() {
-		return new Rectangle(worldX, worldY, image.getWidth(), image.getHeight());
+		return new Rectangle(worldX, worldY, gp.TILESIZE, gp.TILESIZE);
 	}
 	
 	//Getters e setters

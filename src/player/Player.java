@@ -12,7 +12,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import Game.GamePanel;
+import game.GamePanel;
 import item.SuperItem;
 import map.MapController;
 
@@ -27,8 +27,6 @@ public class Player extends Character {
 	private char direction;
 	//Contagem para alteração da animação do personagem andando
 	private int spriteNum = 1, spriteCounter = 0;
-	//Definindo inventário do personagem
-	public List<SuperItem> item = new ArrayList<SuperItem>();
 
 	/**
 	 * Construtor da classe Player
@@ -52,7 +50,7 @@ public class Player extends Character {
 		bounds.width = 8*gp.SCALE;
 		bounds.x = 4*gp.SCALE;
 		bounds.y = 4*gp.SCALE;
-		
+
 		try {
 			//this.image = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
 			this.image = ImageIO.read(getClass().getResourceAsStream("/player/Borg.png"));
@@ -69,7 +67,7 @@ public class Player extends Character {
 		down2 = image.getSubimage(32, 0, 16, 16);	
 		down3 = image.getSubimage(48, 0, 16, 16);	
 		down4 = image.getSubimage(64, 0, 16, 16);	
-		
+
 		up0 = image.getSubimage(0, 16, 16, 16);
 		up1 = image.getSubimage(16, 16, 16, 16);
 		up2 = image.getSubimage(32, 16, 16, 16);
@@ -120,41 +118,52 @@ public class Player extends Character {
 	 * Faz a atualização das coordenadas do personagem de acordo com a velocidade definida e verificar se é um
 	 * caminho de fato e atualiza as 'sprites' referentes a imagem do personagem andando
 	 */
-	public void update()  {
+	public void update() {		
+		//Verifica se objetos especificos estão na posição do personagem
+		checkObjectCollision();
+		
 		if(key.down) {
 			direction = 'd';
 
 			if(checkCollision(direction)) {
-				yWorld+=VELOCIDADE; 
+				yWorld+=currentSpeed; 
 			}
-		} 
+		}
 
 		if(key.up) {
 			direction = 'u';
 
 			if(checkCollision(direction)) {
-				yWorld-=VELOCIDADE;		
+				yWorld-=currentSpeed;		
 			}
-		}	
+		}
 
 		if(key.left) {
 			direction = 'l';
 
 			if(checkCollision(direction)) {
-				xWorld-=VELOCIDADE; 	
+				xWorld-=currentSpeed; 	
 			}
 		}
 
 		if(key.right) {
 			direction = 'r';
-			
+
 			if(checkCollision(direction)) {
-				xWorld+=VELOCIDADE; 	
+				xWorld+=currentSpeed; 	
 			}
 		}
 
-
-
+		if(key.action) {
+			for(int i = 0; i < gp.item.length; i++) {
+				if(gp.item[i] != null && gp.item[i].findItem(new Rectangle(xWorld, yWorld, gp.TILESIZE, gp.TILESIZE))) {
+					if(addItem(gp.item[i])) {
+						gp.item[i] = null;
+					}
+				}
+			}
+		}
+		
 		//Váriaveis de atualização das imagens de animação do personagem
 		if(key.down || key.up || key.right || key.left) {
 			spriteCounter++;
@@ -250,36 +259,5 @@ public class Player extends Character {
 
 		g2.drawImage(image, xScreen, yScreen, gp.TILESIZE, gp.TILESIZE, null);
 		showItem(g2);
-	}
-
-	/**
-	 * Mostra os itens dentro do invetário do personagem 
-	 * @param g2 recebe o componente gráfico do tipo Graphics2D para adicionalo a tela
-	 */
-	public void showItem(Graphics2D g2) {
-		for(SuperItem i : item){
-			int wid = i.getImage().getWidth();
-
-			i.setPositionX(1);
-			i.setPositionY(42);
-
-			g2.setColor(Color.gray);
-			g2.fillRect(0, 42+i.getImage().getWidth()*2, wid*2, wid*2);
-			g2.drawImage(i.getImage(), 0, 42, i.getImage().getWidth()*2, i.getImage().getHeight()*2, null);
-		}
-	}
-
-	/**
-	 * Adiciona o item que o usuário pegou próximo a ele
-	 * @param item item que o usuário pegou
-	 */
-	public boolean addItem(SuperItem item) {
-		if(this.item.size() < 2) {
-			this.item.add(item);	
-			return true;			
-		}
-
-		System.out.println("Inventário cheio");
-		return false;
 	}		
 }
