@@ -1,20 +1,13 @@
 package player;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import game.GamePanel;
-import item.SuperItem;
-import map.MapController;
 
 public class Player extends Character {
 	PeripheralAdapter key;

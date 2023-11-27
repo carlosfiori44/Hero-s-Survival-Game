@@ -1,11 +1,8 @@
 package tela;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import game.GamePanel;
-import game.GameStateControl;
 
 public class MainScreen extends JFrame {
 	
