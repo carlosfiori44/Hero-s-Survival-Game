@@ -12,10 +12,10 @@ import game.GamePanel;
 public class Player extends Character {
 	PeripheralAdapter key;
 	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda)
-	private BufferedImage down0, down1, down2, down3, down4;
-	private BufferedImage up0, up1, up2, up3, up4;
-	private BufferedImage right0, right1, right2, right3, right4;
-	private BufferedImage left0, left1, left2, left3, left4;
+	public BufferedImage down0, down1, down2, down3, down4;
+	public BufferedImage up0, up1, up2, up3, up4;
+	public BufferedImage right0, right1, right2, right3, right4;
+	public BufferedImage left0, left1, left2, left3, left4;
 	//Qual direção o personagem está virado
 	private char direction;
 	//Contagem para alteração da animação do personagem andando

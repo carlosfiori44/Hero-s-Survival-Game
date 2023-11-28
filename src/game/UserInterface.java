@@ -6,11 +6,8 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -18,8 +15,6 @@ import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
-import map.MapController;
 
 public class UserInterface {
 	public GamePanel gp;
@@ -31,7 +26,7 @@ public class UserInterface {
 	private int messageTimer = 0;
 	private double timer = 0; 
 	private DecimalFormat timerFormat = new DecimalFormat("#0");
-	public BufferedImage menuInitial, btDefault, selectionDagger; 
+	public BufferedImage textContainer, btDefault, selectionDagger; 
 	private ImageIcon imagePlay;
 	private JButton btPlay;
 	private Rectangle btPlayBounds;
@@ -60,7 +55,7 @@ public class UserInterface {
 
 		//Carrega as imagens referentes a menu, seja pausa ou menu principal
 		try {
-			menuInitial = ImageIO.read(getClass().getResource("/startScreen/title.png"));
+			textContainer = ImageIO.read(getClass().getResource("/startScreen/titleContainer.png"));
 			imagePlay = new ImageIcon("res//startScreen//btJogar.png");
 			btDefault = ImageIO.read(getClass().getResource("/objects/button.png"));
 			selectionDagger = ImageIO.read(getClass().getResource("/itens/dagger.png"));
@@ -148,22 +143,42 @@ public class UserInterface {
 		String text;
 		int x = gp.SCREENWIDTH/2;
 		int y = gp.SCREENHEIGHT/2 - btDefault.getHeight();
-		int xText = x + (int) (gp.TILESIZE*0.7);
+		int xText;
 		int yText;
 		
 		g2.setColor(Color.black);
 		//Definindo todo backgroud preto
 		g2.fillRect(0, 0, gp.SCREENWIDTH, gp.SCREENHEIGHT);
 		//Colocando a imagem do menu inicial
-		g2.drawImage(menuInitial, gp.SCREENWIDTH/2 - menuInitial.getWidth()/2, gp.SCREENHEIGHT/2 - menuInitial.getHeight()/2, null);
-		
+		//g2.drawImage(menuInitial, gp.SCREENWIDTH/2 - menuInitial.getWidth()/2, gp.SCREENHEIGHT/2 - menuInitial.getHeight()/2, null);
+
 		g2.setColor(Color.WHITE);
+		//Aumentado o tamanho da fonte
+		g2.setFont(gameFont.deriveFont(100f));
+
+		//Desenhando título do jogo
+		text = "Hero's";
+		
+		yText = gp.SCREENHEIGHT/2 - y/2;
+		g2.drawString(text, getCenterXText(text), yText);
+		
+		text = "Survival";
+		g2.drawString(text, getCenterXText(text), yText + getHeightText(text));
+		
+		g2.drawImage(textContainer, getCenterXText(text), yText - textContainer.getHeight()/2 + getHeightText(text)/6, null);
+		g2.drawImage(textContainer, getCenterXText(text) + getWidthText(text), yText - textContainer.getHeight()/2 + getHeightText(text)/6, 
+				-textContainer.getWidth(), textContainer.getHeight(), null);
+
+		//Desenhando o personagem no menu
+		g2.drawImage(gp.player.down1, gp.getHeight()/2 - gp.TILESIZE*4/2, gp.getWidth()/4 + gp.TILESIZE*3/2, gp.TILESIZE*3, gp.TILESIZE*3, null);
+				
 		g2.setFont(gameFont);
 		
 		//Botão de jogar
 		text = "Jogar";
 		y += gp.TILESIZE;
 		g2.drawImage(btDefault, x, y, null);
+		xText = (int) (x + btDefault.getWidth()/2 - g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2);
 		yText = y + (int) (g2.getFontMetrics().getStringBounds(text, g2).getHeight()*1.5);
 		//Desenhando a opção de retomar o jogo
 		g2.drawString(text, xText, yText);
@@ -176,6 +191,7 @@ public class UserInterface {
 		text = "Carregar";
 		y += gp.TILESIZE;
 		g2.drawImage(btDefault, x, y, null);
+		xText = (int) (x + btDefault.getWidth()/2 - g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2);
 		yText = y + (int) (g2.getFontMetrics().getStringBounds(text, g2).getHeight()*1.5);
 		//Desenhando a opção de retomar o jogo
 		g2.drawString(text, xText, yText);
@@ -188,13 +204,14 @@ public class UserInterface {
 		text = "Sair";
 		y += gp.TILESIZE;
 		g2.drawImage(btDefault, x, y, null);
+		xText = (int) (x + btDefault.getWidth()/2 - g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2);
 		yText = y + (int) (g2.getFontMetrics().getStringBounds(text, g2).getHeight()*1.5);
 		//Desenhando a opção de retomar o jogo
 		g2.drawString(text, xText, yText);
 		//Colocando a seta seletora para cada opção
 		if(option == 2) {
 			g2.drawImage(selectionDagger, x - gp.TILESIZE, yText-gp.TILESIZE/2, gp.TILESIZE, gp.TILESIZE, null);
-		}		
+		}				
 	}
 
 	/**
@@ -275,5 +292,21 @@ public class UserInterface {
 		return (gp.SCREENWIDTH/2) - widthTextScreen;
 	}
 	
+	/**
+	 * Método que faz a verificação da largura do texto especificado
+	 * @param text text Váriavel String referente ao texto a ser coletado informação
+	 * @return Retorna o valor da largura do texto
+	 */
+	public int getWidthText(String text) {
+		return (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+	}
 	
+	/**
+	 * Método que faz a verificação da altura do texto especificado
+	 * @param text Váriavel String referente ao texto a ser coletado informação
+	 * @return Retorna o valor da altura do texto
+	 */
+	public int getHeightText(String text) {
+		return (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+	}
 }
