@@ -3,11 +3,14 @@ package game;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
@@ -18,15 +21,15 @@ import javax.swing.JButton;
 import map.MapController;
 
 public class UserInterface {
-	GamePanel gp;
-	Font defaultArial;
+	public GamePanel gp;
+	public Font defaultArial, gameFont;
 	private String message = "";
 	private boolean messageVisible = false;
 	public boolean gameEnd = false; 
 	private int messageTimer = 0;
 	private double timer = 0; 
 	private DecimalFormat timerFormat = new DecimalFormat("#0");
-	public BufferedImage menuInitial; 
+	public BufferedImage menuInitial, btDefault; 
 	private ImageIcon imagePlay;
 	private JButton btPlay;
 	private Rectangle btPlayBounds;
@@ -39,21 +42,22 @@ public class UserInterface {
 	 */
 	public UserInterface(GamePanel gp) {
 		this.gp = gp;
-
 		option = 0;
+		
 		defaultArial = new Font("Arial", Font.PLAIN, 40);
+		gameFont = new Font("MS Serif", Font.BOLD, 30);
 
 		//Carrega as imagens referentes a menu, seja pausa ou menu principal
 		try {
 			menuInitial = ImageIO.read(getClass().getResource("/startScreen/title.png"));
 			imagePlay = new ImageIcon("res//startScreen//btJogar.png");
+			btDefault = ImageIO.read(getClass().getResource("/objects/button.png"));
+			
 			btPlayBounds = new Rectangle(gp.SCREENWIDTH/2, gp.SCREENHEIGHT/2, imagePlay.getImage().getWidth(null), imagePlay.getImage().getHeight(null));	
-
+			
+			
 			btPlay = new JButton(imagePlay);
-			btPlay.setBounds(btPlayBounds);
-
-			//Chama o menu inicial
-			drawMenu();			
+			btPlay.setBounds(btPlayBounds);		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -71,7 +75,58 @@ public class UserInterface {
 	/**
 	 * Método que mostra o menu inicial do jogo
 	 */
-	public void drawMenu() {	
+	public void drawMenu(Graphics2D g2) {	
+		String text;
+		int x = gp.SCREENWIDTH/2;
+		int y = gp.SCREENHEIGHT/2 - btDefault.getHeight();
+		int xText = x + (int) (gp.TILESIZE*0.7);
+		int yText;
+		
+		g2.setColor(Color.black);
+		//Definindo todo backgroud preto
+		g2.fillRect(0, 0, gp.SCREENWIDTH, gp.SCREENHEIGHT);
+		//Colocando a imagem do menu inicial
+		g2.drawImage(menuInitial, gp.SCREENWIDTH/2 - menuInitial.getWidth()/2, gp.SCREENHEIGHT/2 - menuInitial.getHeight()/2, null);
+		
+		g2.setColor(Color.WHITE);
+		g2.setFont(gameFont);
+		
+		//Botão de jogar
+		text = "Jogar";
+		y += gp.TILESIZE;
+		g2.drawImage(btDefault, x, y, null);
+		yText = y + (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+		//Desenhando a opção de retomar o jogo
+		g2.drawString(text, xText, yText);
+		//Colocando a seta seletora para cada opção
+		if(option == 0) {
+			g2.drawString(">", x - gp.TILESIZE, yText);
+		}
+		
+		//Colocando os botões do menu inicial
+		text = "Carregar";
+		y += gp.TILESIZE;
+		g2.drawImage(btDefault, x, y, null);
+		yText = y + (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+		//Desenhando a opção de retomar o jogo
+		g2.drawString(text, xText, yText);
+		//Colocando a seta seletora para cada opção
+		if(option == 1) {
+			g2.drawString(">", x - gp.TILESIZE, yText);
+		}
+
+		//Colocando os botões do menu inicial
+		text = "Sair";
+		y += gp.TILESIZE;
+		g2.drawImage(btDefault, x, y, null);
+		yText = y + (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+		//Desenhando a opção de retomar o jogo
+		g2.drawString(text, xText, yText);
+		//Colocando a seta seletora para cada opção
+		if(option == 2) {
+			g2.drawString(">", x - gp.TILESIZE, yText);
+		}		
+		
 		btPlay.addActionListener(new ActionListener() {					
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -80,7 +135,7 @@ public class UserInterface {
 				gp.removeAll();				
 			}
 		});		
-		gp.add(btPlay);
+				
 	}
 
 	/**
@@ -145,7 +200,6 @@ public class UserInterface {
 		if(option == 2) {
 			g2.drawString(">", x - gp.TILESIZE, y);
 		}
-
 	}
 
 	/**
@@ -210,4 +264,6 @@ public class UserInterface {
 
 		return (gp.SCREENWIDTH/2) - widthTextScreen;
 	}
+	
+	
 }

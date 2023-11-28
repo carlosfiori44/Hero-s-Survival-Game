@@ -27,7 +27,9 @@ public class GamePanel extends JPanel implements Runnable {
 	//Classe que projeta o background
 	public MapController map = new MapController(this);
 	//Definindo a Thread
-	public Thread gameThread;	
+	public Thread gameThread;
+	//Definindo a váriavel do tipo Graphics
+	Graphics2D graphics;
 	//Frames por segundo
 	private final int FPS = 60;
 	//Estado atual do jogo
@@ -105,13 +107,11 @@ public class GamePanel extends JPanel implements Runnable {
 	 * Coloca as imagem dos objetos dentro da tela, por meio do objeto do tipo Graphics
 	 */ 
 	public void paintComponent(Graphics g) {
-		Graphics2D graphics = (Graphics2D) g;	
+		graphics = (Graphics2D) g;	
 
-		//Verifica se o estado do jogo é o menu inici
+		//Verifica se o estado do jogo é o menu inicial
 		if(gameState == TITLESCREEN) {			
-			graphics.setColor(Color.black);
-			graphics.fillRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
-			graphics.drawImage(ui.menuInitial, SCREENWIDTH/2 - ui.menuInitial.getWidth()/2, SCREENHEIGHT/2 - ui.menuInitial.getHeight()/2, null);
+			ui.drawMenu(graphics);
 		} 
 
 		//Verifica se o estado do jogo é no modo jogável
@@ -126,14 +126,13 @@ public class GamePanel extends JPanel implements Runnable {
 			
 			player.draw(graphics);	
 			ui.draw(graphics);
-			
-			g.dispose();
 		}
 
 		//Verifica se o jogo está pausado
 		if(gameState == PAUSESCREEN) {
 			ui.drawPause(graphics);
-			g.dispose();
 		}
+		
+		g.dispose();
 	}
 }

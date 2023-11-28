@@ -79,7 +79,37 @@ public class PeripheralAdapter implements KeyListener {
 			}			
 			//Caso esteja na tela de inicio
 		} else if(gp.gameState == gp.TITLESCREEN) {
-
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_W: 
+				if(gp.ui.option != 0){
+					gp.ui.option--;
+				} else {
+					gp.ui.option = 2;
+				}
+				break;
+			case KeyEvent.VK_S: 
+				if(gp.ui.option != 2){
+					gp.ui.option++;
+				} else {
+					gp.ui.option = 0;
+				}				
+				break;			
+			case KeyEvent.VK_ESCAPE:
+				gp.gameState = gp.PLAYSCREEN;
+				gp.ui.option = 0;
+				break;
+			case KeyEvent.VK_ENTER:
+				if(gp.ui.option == 0) {
+					//Inicia o jogo
+					gp.gameState = gp.PLAYSCREEN;
+				} else if(gp.ui.option == 1) {
+					//Carrega um salvamento do jogo
+				} else if(gp.ui.option == 2) {
+					//Sair do jogo
+					System.exit(0);
+				}
+				break;
+			}
 		}
 
 	}
