@@ -165,8 +165,8 @@ public class UserInterface {
 		text = "Survival";
 		g2.drawString(text, getCenterXText(text), yText + getHeightText(text));
 		
-		g2.drawImage(textContainer, getCenterXText(text), yText - textContainer.getHeight()/2 + getHeightText(text)/6, null);
-		g2.drawImage(textContainer, getCenterXText(text) + getWidthText(text), yText - textContainer.getHeight()/2 + getHeightText(text)/6, 
+		g2.drawImage(textContainer, getCenterXText(text) - gp.TILESIZE/4, yText - textContainer.getHeight()/2 + getHeightText(text)/6, null);
+		g2.drawImage(textContainer, getCenterXText(text) + getWidthText(text) + gp.TILESIZE/4, yText - textContainer.getHeight()/2 + getHeightText(text)/6, 
 				-textContainer.getWidth(), textContainer.getHeight(), null);
 
 		//Desenhando o personagem no menu
