@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
@@ -23,7 +24,7 @@ import map.MapController;
 public class UserInterface {
 	public GamePanel gp;
 	public Graphics2D g2;
-	public Font defaultArial, gameFont;
+	public Font defaultFont, gameFont;
 	private String message = "";
 	private boolean messageVisible = false;
 	public boolean gameEnd = false; 
@@ -45,8 +46,17 @@ public class UserInterface {
 		this.gp = gp;
 		option = 0;
 		
-		defaultArial = new Font("Arial", Font.PLAIN, 40);
-		gameFont = new Font("MS Serif", Font.BOLD, 30);
+		InputStream inputStream = getClass().getResourceAsStream("/font/Dwarf Fat Regular.otf");
+		try {
+			gameFont = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(28F);
+			
+			inputStream = getClass().getResourceAsStream("/font/minecraft_font.ttf");
+			defaultFont = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(40F);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		//Carrega as imagens referentes a menu, seja pausa ou menu principal
 		try {
@@ -89,11 +99,11 @@ public class UserInterface {
 			String endGame = "Fim de jogo!";
 			String thanks = "Obrigado por jogar!";
 
-			g2.setFont(defaultArial);
+			g2.setFont(defaultFont);
 			g2.setColor(Color.ORANGE);
 			g2.drawString(endGame, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(endGame, g2).getWidth()/2, gp.TILESIZE*2);
 
-			g2.setFont(defaultArial);
+			g2.setFont(defaultFont);
 			g2.drawString(thanks, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(thanks, g2).getWidth()/2, gp.TILESIZE*3);
 
 			gp.player.setPosition(gp.SCREENWIDTH/2 - gp.player.getBounds().width, gp.TILESIZE*4);
@@ -104,7 +114,7 @@ public class UserInterface {
 
 		} else if(gp.gameState == gp.PLAYSCREEN) {
 			//Informação sobre a quantidade de itens do jogador
-			g2.setFont(defaultArial);
+			g2.setFont(defaultFont);
 			g2.setColor(Color.white);
 			g2.drawString("Itens: " + gp.player.item.size(), 0, 40);
 
@@ -154,7 +164,7 @@ public class UserInterface {
 		text = "Jogar";
 		y += gp.TILESIZE;
 		g2.drawImage(btDefault, x, y, null);
-		yText = y + (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+		yText = y + (int) (g2.getFontMetrics().getStringBounds(text, g2).getHeight()*1.5);
 		//Desenhando a opção de retomar o jogo
 		g2.drawString(text, xText, yText);
 		//Colocando a seta seletora para cada opção
@@ -166,7 +176,7 @@ public class UserInterface {
 		text = "Carregar";
 		y += gp.TILESIZE;
 		g2.drawImage(btDefault, x, y, null);
-		yText = y + (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+		yText = y + (int) (g2.getFontMetrics().getStringBounds(text, g2).getHeight()*1.5);
 		//Desenhando a opção de retomar o jogo
 		g2.drawString(text, xText, yText);
 		//Colocando a seta seletora para cada opção
@@ -178,7 +188,7 @@ public class UserInterface {
 		text = "Sair";
 		y += gp.TILESIZE;
 		g2.drawImage(btDefault, x, y, null);
-		yText = y + (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
+		yText = y + (int) (g2.getFontMetrics().getStringBounds(text, g2).getHeight()*1.5);
 		//Desenhando a opção de retomar o jogo
 		g2.drawString(text, xText, yText);
 		//Colocando a seta seletora para cada opção
@@ -211,7 +221,7 @@ public class UserInterface {
 		g2.drawRoundRect(x, y, gp.SCREENWIDTH/2, gp.SCREENHEIGHT - gp.TILESIZE*2, 20, 20);
 
 		g2.setColor(Color.WHITE);
-		g2.setFont(defaultArial);
+		g2.setFont(defaultFont);
 
 		//Desenhando o texto de pause
 		text = "Pausado";

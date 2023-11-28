@@ -211,7 +211,7 @@ public class Character {
 			if(gp.item[i] != null && gp.item[i].findItem(new Rectangle(xWorld, yWorld, gp.TILESIZE, gp.TILESIZE))) {
 				if(addItem(gp.item[i])) {
 					gp.item[i] = null;
-					gp.ui.setMessage("Você pegou um item!");
+					gp.ui.setMessage("Voce pegou um item!");
 				}
 			}
 		}		
