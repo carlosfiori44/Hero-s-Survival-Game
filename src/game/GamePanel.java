@@ -107,31 +107,19 @@ public class GamePanel extends JPanel implements Runnable {
 	 * Coloca as imagem dos objetos dentro da tela, por meio do objeto do tipo Graphics
 	 */ 
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		graphics = (Graphics2D) g;	
 
-		//Verifica se o estado do jogo é o menu inicial
-		if(gameState == TITLESCREEN) {			
-			ui.drawMenu(graphics);
-		} 
+		map.draw(graphics);			
 
-		//Verifica se o estado do jogo é no modo jogável
-		if(gameState == PLAYSCREEN) {		
-			map.draw(graphics);			
-
-			for(int i = 0; i < item.length; i++) {
-				if(item[i] != null) {
-					item[i].draw(graphics);
-				}				
-			}
-			
-			player.draw(graphics);	
-			ui.draw(graphics);
+		for(int i = 0; i < item.length; i++) {
+			if(item[i] != null) {
+				item[i].draw(graphics);
+			}				
 		}
-
-		//Verifica se o jogo está pausado
-		if(gameState == PAUSESCREEN) {
-			ui.drawPause(graphics);
-		}
+		
+		player.draw(graphics);
+		ui.draw(graphics);
 		
 		g.dispose();
 	}

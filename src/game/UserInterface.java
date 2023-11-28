@@ -22,6 +22,7 @@ import map.MapController;
 
 public class UserInterface {
 	public GamePanel gp;
+	public Graphics2D g2;
 	public Font defaultArial, gameFont;
 	private String message = "";
 	private boolean messageVisible = false;
@@ -29,7 +30,7 @@ public class UserInterface {
 	private int messageTimer = 0;
 	private double timer = 0; 
 	private DecimalFormat timerFormat = new DecimalFormat("#0");
-	public BufferedImage menuInitial, btDefault; 
+	public BufferedImage menuInitial, btDefault, selectionDagger; 
 	private ImageIcon imagePlay;
 	private JButton btPlay;
 	private Rectangle btPlayBounds;
@@ -52,6 +53,7 @@ public class UserInterface {
 			menuInitial = ImageIO.read(getClass().getResource("/startScreen/title.png"));
 			imagePlay = new ImageIcon("res//startScreen//btJogar.png");
 			btDefault = ImageIO.read(getClass().getResource("/objects/button.png"));
+			selectionDagger = ImageIO.read(getClass().getResource("/itens/dagger.png"));
 			
 			btPlayBounds = new Rectangle(gp.SCREENWIDTH/2, gp.SCREENHEIGHT/2, imagePlay.getImage().getWidth(null), imagePlay.getImage().getHeight(null));	
 			
@@ -71,11 +73,68 @@ public class UserInterface {
 		this.message = message;
 		messageVisible = true;
 	}
+	
+	/**
+	 * Desenha mensagens dentro do JFrame
+	 * @param g2 Objeto do componente gráfico do tipo Graphics2D
+	 */
+	public void draw(Graphics2D g2) {	
+		this.g2 = g2;
+		
+		if(gameEnd) {
+			//Tela de fim de jogo
+			g2.setColor(Color.black);
+			g2.fillRect(0, 0, gp.SCREENWIDTH, gp.SCREENHEIGHT);
+
+			String endGame = "Fim de jogo!";
+			String thanks = "Obrigado por jogar!";
+
+			g2.setFont(defaultArial);
+			g2.setColor(Color.ORANGE);
+			g2.drawString(endGame, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(endGame, g2).getWidth()/2, gp.TILESIZE*2);
+
+			g2.setFont(defaultArial);
+			g2.drawString(thanks, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(thanks, g2).getWidth()/2, gp.TILESIZE*3);
+
+			gp.player.setPosition(gp.SCREENWIDTH/2 - gp.player.getBounds().width, gp.TILESIZE*4);
+
+			gp.player.draw(g2);
+
+			gp.gameThread = null;
+
+		} else if(gp.gameState == gp.PLAYSCREEN) {
+			//Informação sobre a quantidade de itens do jogador
+			g2.setFont(defaultArial);
+			g2.setColor(Color.white);
+			g2.drawString("Itens: " + gp.player.item.size(), 0, 40);
+
+			//Temporizador do jogo
+			timer += (double) 1/60;
+			g2.drawString("Tempo: " + timerFormat.format(timer), (int) (gp.SCREENWIDTH - g2.getFontMetrics().getStringBounds("Tempo: " + timerFormat.format(timer), g2).getWidth()*1.5), 40);
+
+			//Mesnagem que aparece na tela 
+			if(messageVisible) {
+				g2.setFont(g2.getFont().deriveFont(30F));
+				g2.drawString(message, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(message, g2).getWidth()/2, gp.TILESIZE*2);
+
+				messageTimer++;
+
+				if(messageTimer > 120) {
+					messageTimer = 0;
+					messageVisible = false;
+				}
+			}			
+		} else if(gp.gameState == gp.PAUSESCREEN) {
+			drawPause();
+		} else if(gp.gameState == gp.TITLESCREEN) {
+			drawMenu();
+		}
+	}
 
 	/**
 	 * Método que mostra o menu inicial do jogo
 	 */
-	public void drawMenu(Graphics2D g2) {	
+	public void drawMenu() {	
 		String text;
 		int x = gp.SCREENWIDTH/2;
 		int y = gp.SCREENHEIGHT/2 - btDefault.getHeight();
@@ -100,7 +159,7 @@ public class UserInterface {
 		g2.drawString(text, xText, yText);
 		//Colocando a seta seletora para cada opção
 		if(option == 0) {
-			g2.drawString(">", x - gp.TILESIZE, yText);
+			g2.drawImage(selectionDagger, x - gp.TILESIZE, yText-gp.TILESIZE/2, gp.TILESIZE, gp.TILESIZE, null);
 		}
 		
 		//Colocando os botões do menu inicial
@@ -112,7 +171,7 @@ public class UserInterface {
 		g2.drawString(text, xText, yText);
 		//Colocando a seta seletora para cada opção
 		if(option == 1) {
-			g2.drawString(">", x - gp.TILESIZE, yText);
+			g2.drawImage(selectionDagger, x - gp.TILESIZE, yText-gp.TILESIZE/2, gp.TILESIZE, gp.TILESIZE, null);
 		}
 
 		//Colocando os botões do menu inicial
@@ -124,32 +183,24 @@ public class UserInterface {
 		g2.drawString(text, xText, yText);
 		//Colocando a seta seletora para cada opção
 		if(option == 2) {
-			g2.drawString(">", x - gp.TILESIZE, yText);
+			g2.drawImage(selectionDagger, x - gp.TILESIZE, yText-gp.TILESIZE/2, gp.TILESIZE, gp.TILESIZE, null);
 		}		
-		
-		btPlay.addActionListener(new ActionListener() {					
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gp.map.map = gp.map.MAP_ISLAND;
-				gp.gameState = gp.PLAYSCREEN;
-				gp.removeAll();				
-			}
-		});		
-				
 	}
 
 	/**
 	 * Mostra a tela de pausa com opções de saida, retomada e salvamento do jogo
 	 */
-	public void drawPause(Graphics2D g2) {
+	public void drawPause() {
 		String text;
 
 		int x, y;
 
-		g2.setColor(Color.BLACK);
+		color = new Color(0, 0, 0, 150);
+		
 		x = gp.SCREENWIDTH/4;
 		y = gp.TILESIZE;
 		//Definindo preenchimento do menu de pausa
+		g2.setColor(color);
 		g2.fillRoundRect(x, y, gp.SCREENWIDTH/2, gp.SCREENHEIGHT - gp.TILESIZE*2, 20, 20);
 
 		color = new Color(75,0,130);
@@ -164,7 +215,7 @@ public class UserInterface {
 
 		//Desenhando o texto de pause
 		text = "Pausado";
-		x = getCenterXText(text, g2);
+		x = getCenterXText(text);
 		y += gp.TILESIZE;
 		g2.drawString(text, x,y);
 
@@ -172,7 +223,7 @@ public class UserInterface {
 		g2.setFont(g2.getFont().deriveFont(40f));
 
 		text = "Retomar";
-		x = getCenterXText(text, g2);
+		x = getCenterXText(text);
 		y += gp.TILESIZE*2;
 		//Desenhando a opção de retomar o jogo
 		g2.drawString(text, x, y);
@@ -182,7 +233,7 @@ public class UserInterface {
 		}
 
 		text = "Salvar";
-		x = getCenterXText(text, g2);
+		x = getCenterXText(text);
 		y += gp.TILESIZE;		
 		//Desenhando a opção de salvar jogo		
 		g2.drawString(text, x, y);
@@ -192,7 +243,7 @@ public class UserInterface {
 		}
 
 		text = "Sair";
-		x = getCenterXText(text, g2);
+		x = getCenterXText(text);
 		y += gp.TILESIZE;
 		//Desenhando a opção de sair do jogo		
 		g2.drawString(text, x, y);
@@ -203,63 +254,12 @@ public class UserInterface {
 	}
 
 	/**
-	 * Desenha mensagens dentro do JFrame
-	 * @param g2 Objeto do componente gráfico do tipo Graphics2D
-	 */
-	public void draw(Graphics2D g2) {	
-		if(gameEnd) {
-			//Tela de fim de jogo
-			g2.setColor(Color.black);
-			g2.fillRect(0, 0, gp.SCREENWIDTH, gp.SCREENHEIGHT);
-
-			String endGame = "Fim de jogo!";
-			String thanks = "Obrigado por jogar!";
-
-			g2.setFont(defaultArial);
-			g2.setColor(Color.ORANGE);
-			g2.drawString(endGame, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(endGame, g2).getWidth()/2, gp.TILESIZE*2);
-
-			g2.setFont(defaultArial);
-			g2.drawString(thanks, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(thanks, g2).getWidth()/2, gp.TILESIZE*3);
-
-			gp.player.setPosition(gp.SCREENWIDTH/2 - gp.player.getBounds().width, gp.TILESIZE*4);
-
-			gp.player.draw(g2);
-
-			gp.gameThread = null;
-
-		} else {
-			//Informação sobre a quantidade de itens do jogador
-			g2.setFont(defaultArial);
-			g2.setColor(Color.white);
-			g2.drawString("Itens: " + gp.player.item.size(), 0, 40);
-
-			//Temporizador do jogo
-			timer += (double) 1/60;
-			g2.drawString("Tempo: " + timerFormat.format(timer), (int) (gp.SCREENWIDTH - g2.getFontMetrics().getStringBounds("Tempo: " + timerFormat.format(timer), g2).getWidth()*1.5), 40);
-
-			//Mesnagem que aparece na tela 
-			if(messageVisible) {
-				g2.setFont(g2.getFont().deriveFont(30F));
-				g2.drawString(message, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(message, g2).getWidth()/2, gp.TILESIZE*2);
-
-				messageTimer++;
-
-				if(messageTimer > 120) {
-					messageTimer = 0;
-					messageVisible = false;
-				}
-			}			
-		}		
-	}
-
-	/**
 	 * Método que faz o cálculo da posição horizontal que um determinado texto deve ficar para estar centralizado
 	 * @param Text Texto do tipo String a ser centralizado na tela
 	 * @param G2 Objeto gráfico que faz a inserção no JPanel
 	 * @return Retorna o valor da posição horizontal (X) centralziado
 	 */
-	public int getCenterXText(String text, Graphics2D g2) {
+	public int getCenterXText(String text) {
 		int widthTextScreen = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
 
 		return (gp.SCREENWIDTH/2) - widthTextScreen;
