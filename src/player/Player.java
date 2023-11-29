@@ -79,33 +79,8 @@ public class Player extends Character {
 		right2 = image.getSubimage(32, 48, 16, 16);	
 		right3 = image.getSubimage(48, 48, 16, 16);	
 		right4 = image.getSubimage(64, 48, 16, 16);	
-
-		//Animações da imagem 'player.png
-		/*
-		altura = image.getSubimage(91, 131, 10, 16).getHeight();
-		largura = image.getSubimage(91, 131, 10, 16).getWidth();
-
-		down = image.getSubimage(91, 131, 10, 16);
-		down1 = image.getSubimage(77, 131, 10, 16);
-		down2 = image.getSubimage(107, 131, 10, 16);	
-
-		up = image.getSubimage(91, 150, 10, 16);
-		up1 = image.getSubimage(78, 150, 10, 16);
-		up2 = image.getSubimage(106, 150, 10, 16);
-
-		right = image.getSubimage(92, 169, 10, 16);
-		right1 = image.getSubimage(77, 169, 10, 16);
-		right2 = image.getSubimage(105, 169, 10, 16);		
-
-		//Classes e métodos que fazem a imagem do personagem indo para a direita inverter
-		//e assim animar como se estivesse indo para a esquerda
-		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-largura, 0);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        left = op.filter(right, null);
-        left1 = op.filter(right1, null);
-        left2 = op.filter(right2, null);     
-		 */
+		
+		
 	}
 
 	/**

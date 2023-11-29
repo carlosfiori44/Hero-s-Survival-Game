@@ -16,7 +16,7 @@ import item.SuperItem;
 /**
  * Classe mãe/superclasse para todos os personagens do jogo
  */
-public class Character {
+public class Character implements LoadImage {
 	//Declarando atributos utilizados em cada personagem
 	public int xScreen, yScreen, xWorld, yWorld;
 	//Velocidade do personagem
@@ -32,17 +32,47 @@ public class Character {
 	protected GamePanel gp;
 	//Definindo inventário do personagem
 	public List<SuperItem> item = new ArrayList<SuperItem>();
+	//Character attributes
+	public int characterClass = 1; //Classe referente ao tipo do personagem, lutador, feiticeiro, druída...
+	public int maxLife;
+	public int currentLife;
 
 	public Character(GamePanel gp) {
 		this.gp = gp;
+		setPlayerAttibutes();
 	}
 	
-	/**
-	 * Método utilizado para definir todas as imagens do personagem
-	 */
-	public void load() {	
+	@Override
+	public void load() {		
 	}
 
+	/**
+	 * Define os atributos do personagem com base na classe escolhida
+	 */
+	public void setPlayerAttibutes() {
+		switch(characterClass) {
+		//***Classes***
+		//Cavaleiro
+		case 0: break;
+		//Lenhador
+		case 1: 
+			maxLife = 12;					
+			break;
+		//Lançador
+		case 2: break;
+		//Assassino
+		case 3: break;
+		//Arqueiro
+		case 4: break;
+		//Mago
+		case 5: break;
+		//Mosqueteiro
+		case 6: break;
+		}
+		
+		currentLife = maxLife;	
+	}
+	
 	/**
 	 * Retorna os limites da imagem do personagem
 	 * @return retorna os tamanho da imagem do personagem
@@ -244,7 +274,7 @@ public class Character {
 			i.setPositionX(1);
 			i.setPositionY(42);
 
-			g2.drawImage(i.getImage(), 0, positionY, gp.TILESIZE/2, gp.TILESIZE/2, null);
+			g2.drawImage(i.image, 0, positionY, gp.TILESIZE/2, gp.TILESIZE/2, null);
 			
 			positionY += gp.TILESIZE + 4;
 		}

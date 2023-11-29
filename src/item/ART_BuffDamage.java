@@ -6,9 +6,9 @@ import javax.imageio.ImageIO;
 
 import game.GamePanel;
 
-public class BuffDamage extends SuperItem {
+public class ART_BuffDamage extends SuperItem {
 	
-	public BuffDamage(GamePanel gp) {
+	public ART_BuffDamage(GamePanel gp) {
 		this.gp = gp;
 		
 		name = "Damage Increase";

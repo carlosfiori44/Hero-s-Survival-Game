@@ -16,6 +16,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import item.ART_Heart;
+
 public class UserInterface {
 	public GamePanel gp;
 	public Graphics2D g2;
@@ -26,7 +28,10 @@ public class UserInterface {
 	private int messageTimer = 0;
 	private double timer = 0; 
 	private DecimalFormat timerFormat = new DecimalFormat("#0");
+	//Imagens do menu incial
 	public BufferedImage textContainer, btDefault, selectionDagger; 
+	//Imagem da vida do jogador
+	public BufferedImage fullHeart, halfHeart, emptyHeart;
 	private ImageIcon imagePlay;
 	private JButton btPlay;
 	private Rectangle btPlayBounds;
@@ -40,11 +45,11 @@ public class UserInterface {
 	public UserInterface(GamePanel gp) {
 		this.gp = gp;
 		option = 0;
-		
+
 		InputStream inputStream = getClass().getResourceAsStream("/font/Dwarf Fat Regular.otf");
 		try {
 			gameFont = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(28F);
-			
+
 			inputStream = getClass().getResourceAsStream("/font/minecraft_font.ttf");
 			defaultFont = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(40F);
 		} catch (FontFormatException e) {
@@ -59,15 +64,21 @@ public class UserInterface {
 			imagePlay = new ImageIcon("res//startScreen//btJogar.png");
 			btDefault = ImageIO.read(getClass().getResource("/objects/button.png"));
 			selectionDagger = ImageIO.read(getClass().getResource("/itens/dagger.png"));
-			
+
 			btPlayBounds = new Rectangle(gp.SCREENWIDTH/2, gp.SCREENHEIGHT/2, imagePlay.getImage().getWidth(null), imagePlay.getImage().getHeight(null));	
-			
-			
+
+
 			btPlay = new JButton(imagePlay);
 			btPlay.setBounds(btPlayBounds);		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		ART_Heart heart = new ART_Heart(gp);
+		fullHeart = heart.image;
+		halfHeart = heart.image1;
+		emptyHeart = heart.image2;
+
 	}
 
 	/**
@@ -78,14 +89,14 @@ public class UserInterface {
 		this.message = message;
 		messageVisible = true;
 	}
-	
+
 	/**
 	 * Desenha mensagens dentro do JFrame
 	 * @param g2 Objeto do componente gráfico do tipo Graphics2D
 	 */
 	public void draw(Graphics2D g2) {	
 		this.g2 = g2;
-		
+
 		if(gameEnd) {
 			//Tela de fim de jogo
 			g2.setColor(Color.black);
@@ -108,31 +119,64 @@ public class UserInterface {
 			gp.gameThread = null;
 
 		} else if(gp.gameState == gp.PLAYSCREEN) {
-			//Informação sobre a quantidade de itens do jogador
-			g2.setFont(defaultFont);
-			g2.setColor(Color.white);
-			g2.drawString("Itens: " + gp.player.item.size(), 0, 40);
-
-			//Temporizador do jogo
-			timer += (double) 1/60;
-			g2.drawString("Tempo: " + timerFormat.format(timer), (int) (gp.SCREENWIDTH - g2.getFontMetrics().getStringBounds("Tempo: " + timerFormat.format(timer), g2).getWidth()), 40);
-
-			//Mesnagem que aparece na tela 
-			if(messageVisible) {
-				g2.setFont(g2.getFont().deriveFont(30F));
-				g2.drawString(message, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(message, g2).getWidth()/2, gp.TILESIZE*2);
-
-				messageTimer++;
-
-				if(messageTimer > 120) {
-					messageTimer = 0;
-					messageVisible = false;
-				}
-			}			
+			drawGameScreen();			
 		} else if(gp.gameState == gp.PAUSESCREEN) {
 			drawPause();
 		} else if(gp.gameState == gp.TITLESCREEN) {
 			drawMenu();
+		}
+	}
+
+	/**
+	 * Desenha na tela as informações do jogo atual, tais como a vida do jogador, o tempo decorrido e os itens no inventário do jogador
+	 */
+	public void drawGameScreen() {
+		//Informação sobre a quantidade de itens do jogador
+		g2.setFont(defaultFont);
+		g2.setColor(Color.white);
+		g2.drawString("Itens: " + gp.player.item.size(), 0, 40);
+
+		//Temporizador do jogo
+		timer += (double) 1/60;
+		g2.drawString("Tempo: " + timerFormat.format(timer), (int) (gp.SCREENWIDTH - g2.getFontMetrics().getStringBounds("Tempo: " + timerFormat.format(timer), g2).getWidth()), 40);
+
+		//Mesnagem que aparece na tela 
+		if(messageVisible) {
+			g2.setFont(g2.getFont().deriveFont(30F));
+			g2.drawString(message, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(message, g2).getWidth()/2, gp.TILESIZE*2);
+
+			messageTimer++;
+
+			if(messageTimer > 120) {
+				messageTimer = 0;
+				messageVisible = false;
+			}
+		}
+
+		drawPlayerLife();
+	}
+
+	/**
+	 * Desenha a vida atual do personagem na tela
+	 */
+	public void drawPlayerLife() {
+		int x = gp.SCREENWIDTH/2 - (gp.TILESIZE/2 * gp.player.maxLife/2)/2;
+		int y = 0; 
+
+		int playerLife = gp.player.currentLife;
+
+		for(int i = 1; i <= gp.player.maxLife/2; i++) {
+			g2.drawImage(emptyHeart, x, y, gp.TILESIZE/2, gp.TILESIZE/2, null);				
+			
+			if(playerLife >= 2) {
+				g2.drawImage(fullHeart, x, y, gp.TILESIZE/2, gp.TILESIZE/2, null);
+				playerLife -= 2;
+			} else if(playerLife == 1){
+				g2.drawImage(halfHeart, x, y, gp.TILESIZE/2, gp.TILESIZE/2, null);
+				playerLife = 0;
+			}
+			
+			x += gp.TILESIZE/2;
 		}
 	}
 
@@ -145,7 +189,7 @@ public class UserInterface {
 		int y = gp.SCREENHEIGHT/2 - btDefault.getHeight();
 		int xText;
 		int yText;
-		
+
 		g2.setColor(Color.black);
 		//Definindo todo backgroud preto
 		g2.fillRect(0, 0, gp.SCREENWIDTH, gp.SCREENHEIGHT);
@@ -158,22 +202,22 @@ public class UserInterface {
 
 		//Desenhando título do jogo
 		text = "Hero's";
-		
+
 		yText = gp.SCREENHEIGHT/2 - y/2;
 		g2.drawString(text, getCenterXText(text), yText);
-		
+
 		text = "Survival";
 		g2.drawString(text, getCenterXText(text), yText + getHeightText(text));
-		
+
 		g2.drawImage(textContainer, getCenterXText(text) - gp.TILESIZE/4, yText - textContainer.getHeight()/2 + getHeightText(text)/6, null);
 		g2.drawImage(textContainer, getCenterXText(text) + getWidthText(text) + gp.TILESIZE/4, yText - textContainer.getHeight()/2 + getHeightText(text)/6, 
 				-textContainer.getWidth(), textContainer.getHeight(), null);
 
 		//Desenhando o personagem no menu
 		g2.drawImage(gp.player.down1, gp.getHeight()/2 - gp.TILESIZE*4/2, gp.getWidth()/4 + gp.TILESIZE*3/2, gp.TILESIZE*3, gp.TILESIZE*3, null);
-				
+
 		g2.setFont(gameFont);
-		
+
 		//Botão de jogar
 		text = "Jogar";
 		y += gp.TILESIZE;
@@ -186,7 +230,7 @@ public class UserInterface {
 		if(option == 0) {
 			g2.drawImage(selectionDagger, x - gp.TILESIZE, yText-gp.TILESIZE/2, gp.TILESIZE, gp.TILESIZE, null);
 		}
-		
+
 		//Colocando os botões do menu inicial
 		text = "Carregar";
 		y += gp.TILESIZE;
@@ -223,7 +267,7 @@ public class UserInterface {
 		int x, y;
 
 		color = new Color(0, 0, 0, 150);
-		
+
 		x = gp.SCREENWIDTH/4;
 		y = gp.TILESIZE;
 		//Definindo preenchimento do menu de pausa
@@ -291,7 +335,7 @@ public class UserInterface {
 
 		return (gp.SCREENWIDTH/2) - widthTextScreen;
 	}
-	
+
 	/**
 	 * Método que faz a verificação da largura do texto especificado
 	 * @param text text Váriavel String referente ao texto a ser coletado informação
@@ -300,7 +344,7 @@ public class UserInterface {
 	public int getWidthText(String text) {
 		return (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 	}
-	
+
 	/**
 	 * Método que faz a verificação da altura do texto especificado
 	 * @param text Váriavel String referente ao texto a ser coletado informação

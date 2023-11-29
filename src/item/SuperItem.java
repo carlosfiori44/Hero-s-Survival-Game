@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import game.GamePanel;
 
 public class SuperItem {
-	protected BufferedImage image;
+	public BufferedImage image, image1, image2;
 	protected String name;
 	protected boolean collision = false;
 	protected int worldX, worldY;
@@ -58,9 +58,5 @@ public class SuperItem {
 
 	public void setPositionY(int positionY) {
 		this.worldY = positionY;
-	}
-
-	public BufferedImage getImage() {
-		return image;
 	}
 }
