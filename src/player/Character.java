@@ -16,34 +16,75 @@ import item.SuperItem;
 /**
  * Classe mãe/superclasse para todos os personagens do jogo
  */
-public class Character implements LoadImage {
-	//Declarando atributos utilizados em cada personagem
-	public int xScreen, yScreen, xWorld, yWorld;
-	//Velocidade do personagem
-	protected final int DEFAULTSPEED = 8;
-	protected int currentSpeed = DEFAULTSPEED;
+public class Character {
 	//Atributo que vai receber a imagem do personagem
-	protected BufferedImage image;
+	public BufferedImage image;
+	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda)
+	public BufferedImage down0, down1, down2, down3, down4;
+	public BufferedImage up0, up1, up2, up3, up4;
+	public BufferedImage right0, right1, right2, right3, right4;
+	public BufferedImage left0, left1, left2, left3, left4;
+
+	//Contagem para alteração da animação do personagem andando
+	public int spriteNum = 1, spriteCounter = 0;
+
 	//Respectivos tamanho da imagem do personagem
 	protected final int ALTURA = 16, LARGURA = 16;
+	//Declarando atributos utilizados em cada personagem
+	public int xScreen, yScreen, xWorld, yWorld;
+
+	//Qual direção o personagem está virado
+	public char direction;
+
 	//Area que o personagem vai ocupar na tela
 	protected Rectangle bounds;
 	//Atributo referente ao painel da janela
 	protected GamePanel gp;
+
 	//Definindo inventário do personagem
 	public List<SuperItem> item = new ArrayList<SuperItem>();
+
 	//Character attributes
 	public int characterClass = 1; //Classe referente ao tipo do personagem, lutador, feiticeiro, druída...
 	public int maxLife;
 	public int currentLife;
+	//Velocidade do personagem
+	protected final int DEFAULTSPEED = 8
+			;
+	protected int currentSpeed = DEFAULTSPEED;
 
 	public Character(GamePanel gp) {
 		this.gp = gp;
 		setPlayerAttibutes();
 	}
-	
-	@Override
-	public void load() {		
+
+	/**
+	 * Extrai as subimagens da animação do personagem da imagem principal
+	 */
+	public void load() {
+		down0 = image.getSubimage(0, 0, 16, 16);
+		down1 = image.getSubimage(16, 0, 16, 16);
+		down2 = image.getSubimage(32, 0, 16, 16);	
+		down3 = image.getSubimage(48, 0, 16, 16);	
+		down4 = image.getSubimage(64, 0, 16, 16);	
+
+		up0 = image.getSubimage(0, 16, 16, 16);
+		up1 = image.getSubimage(16, 16, 16, 16);
+		up2 = image.getSubimage(32, 16, 16, 16);
+		up3 = image.getSubimage(48, 16, 16, 16);
+		up4 = image.getSubimage(64, 16, 16, 16);
+
+		left0 = image.getSubimage(0, 32, 16, 16);
+		left1 = image.getSubimage(16, 32, 16, 16);
+		left2 = image.getSubimage(32, 32, 16, 16);		
+		left3 = image.getSubimage(48, 32, 16, 16);	
+		left4 = image.getSubimage(64, 32, 16, 16);	
+
+		right0 = image.getSubimage(0, 48, 16, 16);	
+		right1 = image.getSubimage(16, 48, 16, 16);	
+		right2 = image.getSubimage(32, 48, 16, 16);	
+		right3 = image.getSubimage(48, 48, 16, 16);	
+		right4 = image.getSubimage(64, 48, 16, 16);	
 	}
 
 	/**
@@ -58,7 +99,7 @@ public class Character implements LoadImage {
 		case 1: 
 			maxLife = 12;					
 			break;
-		//Lançador
+			//Lançador
 		case 2: break;
 		//Assassino
 		case 3: break;
@@ -69,10 +110,10 @@ public class Character implements LoadImage {
 		//Mosqueteiro
 		case 6: break;
 		}
-		
+
 		currentLife = maxLife;	
 	}
-	
+
 	/**
 	 * Retorna os limites da imagem do personagem
 	 * @return retorna os tamanho da imagem do personagem
@@ -96,7 +137,86 @@ public class Character implements LoadImage {
 	 * @param g2 Objeto gráfico para atualizar no JPanel
 	 */
 	public void draw(Graphics2D g2) {
-		g2.drawImage(image, xScreen, yScreen, null);
+		switch(direction) {
+		case 'u':
+			if(spriteNum == 1) {
+				image = up0;
+			}
+			if(spriteNum == 2) {
+				image = up1;
+			}
+			if(spriteNum == 3) {
+				image = up2;
+			}
+			if(spriteNum == 4) {
+				image = up3;
+			}
+			if(spriteNum == 5) {
+				image = up4;
+			}
+			break;
+		case 'd': 
+			if(spriteNum == 1) {
+				image = down0;
+			}
+			if(spriteNum == 2) {
+				image = down1;
+			}
+			if(spriteNum == 3) {
+				image = down2;
+			}
+			if(spriteNum == 4) {
+				image = down3;
+			}
+			if(spriteNum == 5) {
+				image = down4;
+			}
+			break;
+		case 'l': 
+			if(spriteNum == 1) {
+				image = left0;
+			}	
+			if(spriteNum == 2) {
+				image = left1;
+			}
+			if(spriteNum == 3) {
+				image = left2;
+			}
+			if(spriteNum == 4) {
+				image = left3;
+			}
+			if(spriteNum == 5) {
+				image = left4;
+			}
+			break;
+		case 'r':
+			if(spriteNum == 1) {
+				image = right0;
+			}
+			if(spriteNum == 2) {
+				image = right1;
+			}
+			if(spriteNum == 3) {
+				image = right2;
+			}
+			if(spriteNum == 4) {
+				image = right3;
+			}
+			if(spriteNum == 5) {
+				image = right4;
+			}
+			break;
+		}
+		
+		g2.drawImage(image, xScreen, yScreen, gp.TILESIZE, gp.TILESIZE, null);
+	}
+	
+	/**
+	 * Faz a atualização das coordenadas do personagem de acordo com a velocidade definida e verificar se é um
+	 * caminho de fato e atualiza as 'sprites' referentes a imagem do personagem andando
+	 */
+	public void update() {		
+
 	}
 
 	/**
@@ -104,10 +224,10 @@ public class Character implements LoadImage {
 	 * @param direction Direção que o player está indo
 	 * @return retorna verdadeiro caso o bloco seja passável e falso caso não seja
 	 */
-	public boolean checkCollision(char direction) {
+	public boolean checkCollision() {
 		int leftWorldX = xWorld + bounds.x;
 		int rightWorldX = xWorld + bounds.x + bounds.width;
-		
+
 		int topWorldY = yWorld + bounds.y;
 		int bottomWorldY = yWorld + bounds.y + bounds.height;
 
@@ -117,122 +237,124 @@ public class Character implements LoadImage {
 		int bottomRowY = bottomWorldY/gp.TILESIZE;
 
 		int tileM1, tileM2, tileC1, tileC2;
-		
+
 		boolean collision = true;
-		
+
 		switch(direction) {
 		case 'u': 
 			topRowY = (topWorldY - currentSpeed)/gp.TILESIZE;
-			
+
 			tileM1 = gp.map.mapTile.mapTilePosition[leftColX][topRowY];
 			tileM2 = gp.map.mapTile.mapTilePosition[rightColX][topRowY];
-			
+
 			tileC1 = gp.map.mapTile.construcTilePosition[leftColX][topRowY];
 			tileC2 = gp.map.mapTile.construcTilePosition[rightColX][topRowY];
-			
+
+			//Verificação do backgroud mapa
 			if(gp.map.mapTile.mapTile[tileM1].collision || gp.map.mapTile.mapTile[tileM2].collision) {
 				collision = false;
 			}			
-			
+
+			//*****Verificação dos blocos de construção*****
 			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
 				if(gp.map.mapTile.constructionTile[tileC1].collision) {
 					collision = false;	
 				}	
 			} 
-			
+
 			if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
 				if(gp.map.mapTile.constructionTile[tileC2].collision) {
 					collision = false;	
 				}						
 			}
-			
+
 			break;
-			
+
 		case 'd':
 			bottomRowY = (bottomWorldY + currentSpeed)/gp.TILESIZE;
-			
+
 			tileM1 = gp.map.mapTile.mapTilePosition[leftColX][bottomRowY];
 			tileM2 = gp.map.mapTile.mapTilePosition[rightColX][bottomRowY];
-			
+
 			tileC1 = gp.map.mapTile.construcTilePosition[leftColX][bottomRowY];
 			tileC2 = gp.map.mapTile.construcTilePosition[rightColX][bottomRowY];
-			
+
 			if(gp.map.mapTile.mapTile[tileM1].collision || gp.map.mapTile.mapTile[tileM2].collision) {
 				collision = false;
 			}	
-			
+
 			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
 				if(gp.map.mapTile.constructionTile[tileC1].collision) {
 					collision = false;	
 				}	
 			} 
-			
+
 			if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
 				if(gp.map.mapTile.constructionTile[tileC2].collision) {
 					collision = false;	
 				}			
 			}	
-			
+
 			break;
-			
+
 		case 'l':
 			leftColX = (leftWorldX - currentSpeed)/gp.TILESIZE;
-			
+
 			tileM1 = gp.map.mapTile.mapTilePosition[leftColX][topRowY];
 			tileM2 = gp.map.mapTile.mapTilePosition[leftColX][bottomRowY];
-			
+
 			tileC1 = gp.map.mapTile.construcTilePosition[leftColX][topRowY];
 			tileC2 = gp.map.mapTile.construcTilePosition[leftColX][bottomRowY];
-			
+
 			if(gp.map.mapTile.mapTile[tileM1].collision || gp.map.mapTile.mapTile[tileM2].collision) {
 				collision = false;
 			}	
-			
+
 			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
 				if(gp.map.mapTile.constructionTile[tileC1].collision) {
 					collision = false;	
 				}	
 			} 
-			
+
 			if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
 				if(gp.map.mapTile.constructionTile[tileC2].collision) {
 					collision = false;	
 				}						
 			}
-			
+
 			break;
-			
+
 		case 'r':
 			rightColX = (rightWorldX + currentSpeed)/gp.TILESIZE;
-			
+
 			tileM1 = gp.map.mapTile.mapTilePosition[rightColX][topRowY];
 			tileM2 = gp.map.mapTile.mapTilePosition[rightColX][bottomRowY];
-			
+
 			tileC1 = gp.map.mapTile.construcTilePosition[rightColX][topRowY];
 			tileC2 = gp.map.mapTile.construcTilePosition[rightColX][bottomRowY];
-			
+
 			if(gp.map.mapTile.mapTile[tileM1].collision || gp.map.mapTile.mapTile[tileM2].collision) {
 				collision = false;	
 			} 
-			
+
 			if((tileC1 >= 0 && tileC1 < gp.map.mapTile.numTile)) {
 				if(gp.map.mapTile.constructionTile[tileC1].collision) {
 					collision = false;	
 				}	
 			} 
-			
+
 			if(tileC2 >= 0 && tileC2 < gp.map.mapTile.numTile) {
 				if(gp.map.mapTile.constructionTile[tileC2].collision) {
 					collision = false;	
 				}						
 			}
-			
+
 			break;
 		}
-		
+
 		return collision;
 	}
-	
+
 	/**
 	 * Verifica se o personagem para por cima de um item de buff e adiciona ao status do personagem
 	 */
@@ -245,16 +367,16 @@ public class Character implements LoadImage {
 				}
 			}
 		}		
-		
+
 		int leftWorldX = xWorld + bounds.x;
 		int rightWorldX = xWorld + bounds.x + bounds.width;
-		
+
 		int bottomWorldY = yWorld + bounds.y + bounds.height;
-		
+
 		int leftColX = leftWorldX/gp.TILESIZE;
 		int rightColX = rightWorldX/gp.TILESIZE;
 		int bottomRowY = bottomWorldY/gp.TILESIZE;
-		
+
 		//Verifica se o player está em um arbusto
 		if(gp.map.mapTile.construcTilePosition[leftColX][bottomRowY] == 70 || gp.map.mapTile.construcTilePosition[rightColX][bottomRowY] == 70) {
 			currentSpeed = DEFAULTSPEED/4;
@@ -262,20 +384,20 @@ public class Character implements LoadImage {
 			currentSpeed = DEFAULTSPEED;
 		}
 	}
-	
+
 	/**
 	 * Mostra os itens dentro do invetário do personagem 
 	 * @param g2 recebe o componente gráfico do tipo Graphics2D para adicionalo a tela
 	 */
 	public void showItem(Graphics2D g2) {
 		int positionY = 50;
-		
+
 		for(SuperItem i : item){
 			i.setPositionX(1);
 			i.setPositionY(42);
 
 			g2.drawImage(i.image, 0, positionY, gp.TILESIZE/2, gp.TILESIZE/2, null);
-			
+
 			positionY += gp.TILESIZE + 4;
 		}
 	}

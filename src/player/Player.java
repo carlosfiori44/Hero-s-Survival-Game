@@ -1,8 +1,6 @@
 package player;
 
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -11,15 +9,6 @@ import game.GamePanel;
 
 public class Player extends Character {
 	PeripheralAdapter key;
-	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda)
-	public BufferedImage down0, down1, down2, down3, down4;
-	public BufferedImage up0, up1, up2, up3, up4;
-	public BufferedImage right0, right1, right2, right3, right4;
-	public BufferedImage left0, left1, left2, left3, left4;
-	//Qual direção o personagem está virado
-	private char direction;
-	//Contagem para alteração da animação do personagem andando
-	private int spriteNum = 1, spriteCounter = 0;
 
 	/**
 	 * Construtor da classe Player
@@ -29,7 +18,7 @@ public class Player extends Character {
 	public Player(PeripheralAdapter key, GamePanel gp) {
 		super(gp);
 		this.key = key;
-		
+
 
 		xScreen = (gp.SCREENWIDTH/2) - (gp.TILESIZE/2);
 		yScreen = (gp.SCREENHEIGHT/2) - (gp.TILESIZE/2);
@@ -46,63 +35,28 @@ public class Player extends Character {
 		bounds.y = 4*gp.SCALE;
 
 		try {
-			//this.image = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
-			this.image = ImageIO.read(getClass().getResourceAsStream("/player/Borg.png"));
+			image = ImageIO.read(getClass().getResourceAsStream("/player/Borg.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
 	}
 
+
 	@Override
-	public void load() {	
-		//Carreangdo as imagens de todas as direções do player 
-		down0 = image.getSubimage(0, 0, 16, 16);
-		down1 = image.getSubimage(16, 0, 16, 16);
-		down2 = image.getSubimage(32, 0, 16, 16);	
-		down3 = image.getSubimage(48, 0, 16, 16);	
-		down4 = image.getSubimage(64, 0, 16, 16);	
-
-		up0 = image.getSubimage(0, 16, 16, 16);
-		up1 = image.getSubimage(16, 16, 16, 16);
-		up2 = image.getSubimage(32, 16, 16, 16);
-		up3 = image.getSubimage(48, 16, 16, 16);
-		up4 = image.getSubimage(64, 16, 16, 16);
-
-		left0 = image.getSubimage(0, 32, 16, 16);
-		left1 = image.getSubimage(16, 32, 16, 16);
-		left2 = image.getSubimage(32, 32, 16, 16);		
-		left3 = image.getSubimage(48, 32, 16, 16);	
-		left4 = image.getSubimage(64, 32, 16, 16);	
-
-		right0 = image.getSubimage(0, 48, 16, 16);	
-		right1 = image.getSubimage(16, 48, 16, 16);	
-		right2 = image.getSubimage(32, 48, 16, 16);	
-		right3 = image.getSubimage(48, 48, 16, 16);	
-		right4 = image.getSubimage(64, 48, 16, 16);	
-		
-		
-	}
-
-	/**
-	 * Faz a atualização das coordenadas do personagem de acordo com a velocidade definida e verificar se é um
-	 * caminho de fato e atualiza as 'sprites' referentes a imagem do personagem andando
-	 */
 	public void update() {		
 		//Verifica se objetos especificos estão na posição do personagem
 		checkObjectCollision();
-		
+
 		if(key.down) {
 			direction = 'd';
-
-			if(checkCollision(direction)) {
+			if(checkCollision()) {
 				yWorld+=currentSpeed; 
 			}
 		}
 
 		if(key.up) {
 			direction = 'u';
-
-			if(checkCollision(direction)) {
+			if(checkCollision()) {
 				yWorld-=currentSpeed;		
 			}
 		}
@@ -110,7 +64,7 @@ public class Player extends Character {
 		if(key.left) {
 			direction = 'l';
 
-			if(checkCollision(direction)) {
+			if(checkCollision()) {
 				xWorld-=currentSpeed; 	
 			}
 		}
@@ -118,7 +72,7 @@ public class Player extends Character {
 		if(key.right) {
 			direction = 'r';
 
-			if(checkCollision(direction)) {
+			if(checkCollision()) {
 				xWorld+=currentSpeed; 	
 			}
 		}
@@ -132,7 +86,7 @@ public class Player extends Character {
 				}
 			}
 		}
-		
+
 		//Váriaveis de atualização das imagens de animação do personagem
 		if(key.down || key.up || key.right || key.left) {
 			spriteCounter++;
@@ -152,81 +106,4 @@ public class Player extends Character {
 			}
 		}
 	}
-
-	@Override
-	public void draw(Graphics2D g2) {
-		switch(direction) {
-		case 'u':
-			if(spriteNum == 1) {
-				image = up0;
-			}
-			if(spriteNum == 2) {
-				image = up1;
-			}
-			if(spriteNum == 3) {
-				image = up2;
-			}
-			if(spriteNum == 4) {
-				image = up3;
-			}
-			if(spriteNum == 5) {
-				image = up4;
-			}
-			break;
-		case 'd': 
-			if(spriteNum == 1) {
-				image = down0;
-			}
-			if(spriteNum == 2) {
-				image = down1;
-			}
-			if(spriteNum == 3) {
-				image = down2;
-			}
-			if(spriteNum == 4) {
-				image = down3;
-			}
-			if(spriteNum == 5) {
-				image = down4;
-			}
-			break;
-		case 'l': 
-			if(spriteNum == 1) {
-				image = left0;
-			}	
-			if(spriteNum == 2) {
-				image = left1;
-			}
-			if(spriteNum == 3) {
-				image = left2;
-			}
-			if(spriteNum == 4) {
-				image = left3;
-			}
-			if(spriteNum == 5) {
-				image = left4;
-			}
-			break;
-		case 'r':
-			if(spriteNum == 1) {
-				image = right0;
-			}
-			if(spriteNum == 2) {
-				image = right1;
-			}
-			if(spriteNum == 3) {
-				image = right2;
-			}
-			if(spriteNum == 4) {
-				image = right3;
-			}
-			if(spriteNum == 5) {
-				image = right4;
-			}
-			break;
-		}		
-
-		g2.drawImage(image, xScreen, yScreen, gp.TILESIZE, gp.TILESIZE, null);
-		showItem(g2);
-	}		
 }

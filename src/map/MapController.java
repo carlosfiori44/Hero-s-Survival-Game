@@ -1,5 +1,6 @@
 package map;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -64,6 +65,8 @@ public class MapController {
 	 * @param g2 Objeto gráfico para atualizar no JPanel
 	 */
 	public void draw(Graphics2D g2) {	
+		gp.setBackground(Color.black);
+		
 		if(map == MAP_ISLAND) {
 			mapTile.draw(g2);
 			//g2.drawImage(map_Island_Image, 0, 0, null);

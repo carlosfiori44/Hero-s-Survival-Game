@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import item.SetItem;
 import item.SuperItem;
 import map.MapController;
+import player.ActionController;
 import player.PeripheralAdapter;
 import player.Player;
 
@@ -20,16 +21,6 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int TILESIZE = DEFAULTTILESIZE * SCALE;
 	public final int MAXSCREENCOL = 12, MAXSCREENROW = 8;
 	public final int SCREENHEIGHT = TILESIZE * MAXSCREENROW, SCREENWIDTH = TILESIZE * MAXSCREENCOL;
-	//Classe que lê as teclas pressionadas
-	private PeripheralAdapter peripheral = new PeripheralAdapter(this);
-	//Criando objeto do tipo Character
-	public Player player = new Player(peripheral, this); 
-	//Classe que projeta o background
-	public MapController map = new MapController(this);
-	//Definindo a Thread
-	public Thread gameThread;
-	//Definindo a váriavel do tipo Graphics
-	Graphics2D graphics;
 	//Frames por segundo
 	private final int FPS = 60;
 	//Estado atual do jogo
@@ -37,11 +28,26 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int PLAYSCREEN = 1;		
 	public final int PAUSESCREEN = 2;
 	public int gameState = TITLESCREEN;
+
+	//Definindo a Thread que vai tornar o jogo continuo
+	public Thread gameThread;	
+
+	//Classe que lê as teclas pressionadas
+	private PeripheralAdapter peripheral = new PeripheralAdapter(this);
+	//Criando objeto do tipo Character
+	public Player player = new Player(peripheral, this); 
+	//Classe referente as mensagens e menus que vão aparecer na tela
+	public UserInterface ui = new UserInterface(this);
+	//Instanciando o gerenciador de eventos
+	public ActionController ac = new ActionController(this);	
+	
+	//Classe que projeta o background
+	public MapController map = new MapController(this);
+
 	//Definindo classe de itens, 'inventário de itens' e localização de itens
 	public SetItem setItem = new SetItem(this);
 	public SuperItem item[] = new SuperItem[4];	
-	//Classe referente as mensagens e menus que vão aparecer na tela
-	public UserInterface ui = new UserInterface(this);
+
 
 	/**
 	 * Método construtor da clase Fase, utilizada quando a mesma é instanciada
@@ -108,7 +114,7 @@ public class GamePanel extends JPanel implements Runnable {
 	 */ 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		graphics = (Graphics2D) g;	
+		Graphics2D graphics = (Graphics2D) g;	
 
 		map.draw(graphics);			
 
@@ -117,10 +123,10 @@ public class GamePanel extends JPanel implements Runnable {
 				item[i].draw(graphics);
 			}				
 		}
-		
+
 		player.draw(graphics);
 		ui.draw(graphics);
-		
+
 		g.dispose();
 	}
 }

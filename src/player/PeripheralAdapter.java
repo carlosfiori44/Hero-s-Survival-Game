@@ -20,7 +20,7 @@ public class PeripheralAdapter implements KeyListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {	
+	public void keyPressed(KeyEvent e) {
 		//Caso esteja em modo de jogo
 		if(gp.gameState == gp.PLAYSCREEN) {
 			switch (e.getKeyCode()) {
