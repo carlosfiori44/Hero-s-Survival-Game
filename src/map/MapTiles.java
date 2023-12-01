@@ -11,8 +11,8 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import game.GamePanel;
 import player.Player;
+import screen.GamePanel;
 
 public class MapTiles {
 	//Definindo atributos

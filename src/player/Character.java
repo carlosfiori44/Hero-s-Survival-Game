@@ -10,8 +10,8 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import game.GamePanel;
 import item.SuperItem;
+import screen.GamePanel;
 
 /**
  * Classe mãe/superclasse para todos os personagens do jogo

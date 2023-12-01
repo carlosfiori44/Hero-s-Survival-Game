@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import game.GamePanel;
+import screen.GamePanel;
 
 /**
  * Classe utilizada para mover o personagem conforme as teclas são pressionadas

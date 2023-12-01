@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import game.GamePanel;
+import screen.GamePanel;
 
 public class Player extends Character {
 	PeripheralAdapter key;

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import game.GamePanel;
+import screen.GamePanel;
 
 public class ART_Heart extends SuperItem {
 	

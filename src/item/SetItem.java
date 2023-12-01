@@ -1,6 +1,6 @@
 package item;
 
-import game.GamePanel;
+import screen.GamePanel;
 
 public class SetItem {
 	private GamePanel gp;

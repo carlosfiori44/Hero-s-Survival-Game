@@ -1,4 +1,4 @@
-package game;
+package screen;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

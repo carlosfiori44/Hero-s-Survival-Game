@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import game.GamePanel;
+import screen.GamePanel;
 
 public class SuperItem {
 	public BufferedImage image, image1, image2;

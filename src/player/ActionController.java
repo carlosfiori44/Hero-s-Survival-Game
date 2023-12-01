@@ -1,6 +1,6 @@
 package player;
 
-import game.GamePanel;
+import screen.GamePanel;
 
 public class ActionController {
 	GamePanel gp;
