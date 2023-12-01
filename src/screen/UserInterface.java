@@ -18,6 +18,9 @@ import javax.swing.JButton;
 
 import item.ART_Heart;
 
+/**
+ * Gerencia e mostra as mensagens e menus para o jogador
+ */
 public class UserInterface {
 	public GamePanel gp;
 	public Graphics2D g2;

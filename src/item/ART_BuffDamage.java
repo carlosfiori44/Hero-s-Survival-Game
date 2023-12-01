@@ -6,6 +6,9 @@ import javax.imageio.ImageIO;
 
 import screen.GamePanel;
 
+/**
+ * Classe que generaliza de SuperItem e é um item que aumenta o dano do jogador
+ */
 public class ART_BuffDamage extends SuperItem {
 	
 	public ART_BuffDamage(GamePanel gp) {

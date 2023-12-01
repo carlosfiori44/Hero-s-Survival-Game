@@ -14,6 +14,9 @@ import javax.imageio.ImageIO;
 import player.Player;
 import screen.GamePanel;
 
+/**
+ * Cria a imagem de fundo com base em blocos e uma matriz de posição de cada bloco
+ */
 public class MapTiles {
 	//Definindo atributos
 	private GamePanel gp;

@@ -2,6 +2,9 @@ package item;
 
 import screen.GamePanel;
 
+/**
+ * Classe que tem o objetivo de definir a localização dos itens no mapa
+ */
 public class SetItem {
 	private GamePanel gp;
 	

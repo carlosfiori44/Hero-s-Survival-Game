@@ -9,6 +9,9 @@ import javax.imageio.ImageIO;
 
 import screen.GamePanel;
 
+/**
+ * Realiza o controlle entre entre os mapas em que o jogador está no momento
+ */
 public class MapController {
 	//Definindo o atributos das imagens de fundo
 	private BufferedImage map_Island_Image;

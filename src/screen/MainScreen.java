@@ -2,6 +2,9 @@ package screen;
 
 import javax.swing.JFrame;
 
+/**
+ * Classe que generaliza o JFrame e é a tela principal e única que inicia o jogo
+ */
 public class MainScreen extends JFrame {
 	
 	/**

@@ -15,6 +15,9 @@ import player.ActionController;
 import player.PeripheralAdapter;
 import player.Player;
 
+/**
+ * Classe que é uma generalização do JPanel e faz toda a junção das outras classes do jogo
+ */
 public class GamePanel extends JPanel implements Runnable {  
 	//Atributos do tamanho da tela e blocos (tiles)
 	public final int DEFAULTTILESIZE = 16, SCALE = 5;

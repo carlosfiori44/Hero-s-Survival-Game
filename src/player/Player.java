@@ -7,6 +7,9 @@ import javax.imageio.ImageIO;
 
 import screen.GamePanel;
 
+/**
+ * Classe generalizada de Character que representa o jogador principal 
+ */
 public class Player extends Character {
 	PeripheralAdapter key;
 

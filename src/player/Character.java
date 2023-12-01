@@ -14,7 +14,7 @@ import item.SuperItem;
 import screen.GamePanel;
 
 /**
- * Classe mãe/superclasse para todos os personagens do jogo
+ * Superclasse para todos os personagens do jogo
  */
 public class Character {
 	//Atributo que vai receber a imagem do personagem

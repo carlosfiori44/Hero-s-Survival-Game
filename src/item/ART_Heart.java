@@ -6,6 +6,9 @@ import javax.imageio.ImageIO;
 
 import screen.GamePanel;
 
+/**
+ * Classe que generaliza de SuperItem e referencia a vida do jogador
+ */
 public class ART_Heart extends SuperItem {
 	
 	public ART_Heart(GamePanel gp) {
