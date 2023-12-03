@@ -18,15 +18,14 @@ import screen.GamePanel;
  */
 public class Character {
 	//Atributo que vai receber a imagem do personagem
-	public BufferedImage image;
-	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda)
-	public BufferedImage down0, down1, down2, down3, down4;
-	public BufferedImage up0, up1, up2, up3, up4;
-	public BufferedImage right0, right1, right2, right3, right4;
-	public BufferedImage left0, left1, left2, left3, left4;
-
+	public BufferedImage currentImage, image;
+	//Imagens de cada posição do personagem(cima, baixo, direita, esquerda
+	//A coluna da matrix representa a direção, 0 = down, 1 = up, 2 = left, 3 = right
+	public BufferedImage[][] moviment = new BufferedImage[4][5];
+	public BufferedImage[][] atackMoviment = new BufferedImage[4][6];
 	//Contagem para alteração da animação do personagem andando
-	public int spriteNum = 1, spriteCounter = 0;
+	public int spriteNum = 1, spriteAttNum = 1, spriteCounter = 0, attackCounter = 0;
+	public boolean attack = false;
 
 	//Respectivos tamanho da imagem do personagem
 	protected final int ALTURA = 16, LARGURA = 16;
@@ -42,6 +41,7 @@ public class Character {
 	protected GamePanel gp;
 
 	//Definindo inventário do personagem
+	public int invetorySize = 4;
 	public List<SuperItem> item = new ArrayList<SuperItem>();
 
 	//Character attributes
@@ -49,42 +49,12 @@ public class Character {
 	public int maxLife;
 	public int currentLife;
 	//Velocidade do personagem
-	protected final int DEFAULTSPEED = 8
-			;
+	protected final int DEFAULTSPEED = 8;
 	protected int currentSpeed = DEFAULTSPEED;
 
 	public Character(GamePanel gp) {
 		this.gp = gp;
 		setPlayerAttibutes();
-	}
-
-	/**
-	 * Extrai as subimagens da animação do personagem da imagem principal
-	 */
-	public void load() {
-		down0 = image.getSubimage(0, 0, 16, 16);
-		down1 = image.getSubimage(16, 0, 16, 16);
-		down2 = image.getSubimage(32, 0, 16, 16);	
-		down3 = image.getSubimage(48, 0, 16, 16);	
-		down4 = image.getSubimage(64, 0, 16, 16);	
-
-		up0 = image.getSubimage(0, 16, 16, 16);
-		up1 = image.getSubimage(16, 16, 16, 16);
-		up2 = image.getSubimage(32, 16, 16, 16);
-		up3 = image.getSubimage(48, 16, 16, 16);
-		up4 = image.getSubimage(64, 16, 16, 16);
-
-		left0 = image.getSubimage(0, 32, 16, 16);
-		left1 = image.getSubimage(16, 32, 16, 16);
-		left2 = image.getSubimage(32, 32, 16, 16);		
-		left3 = image.getSubimage(48, 32, 16, 16);	
-		left4 = image.getSubimage(64, 32, 16, 16);	
-
-		right0 = image.getSubimage(0, 48, 16, 16);	
-		right1 = image.getSubimage(16, 48, 16, 16);	
-		right2 = image.getSubimage(32, 48, 16, 16);	
-		right3 = image.getSubimage(48, 48, 16, 16);	
-		right4 = image.getSubimage(64, 48, 16, 16);	
 	}
 
 	/**
@@ -95,23 +65,46 @@ public class Character {
 		//***Classes***
 		//Cavaleiro
 		case 0: break;
+
 		//Lenhador
 		case 1: 
 			maxLife = 12;					
 			break;
+
 			//Lançador
 		case 2: break;
+
 		//Assassino
 		case 3: break;
+
 		//Arqueiro
 		case 4: break;
+
 		//Mago
 		case 5: break;
+
 		//Mosqueteiro
 		case 6: break;
 		}
 
 		currentLife = maxLife;	
+	}
+
+	/**
+	 * Extrai as subimagens da animação do personagem da imagem principal
+	 */
+	public void load() {
+		for (int i = 0; i < moviment.length; i++) {
+			for (int j = 0; j < moviment[i].length; j++) {
+				moviment[i][j] = image.getSubimage(j*16, i*16, gp.DEFAULTTILESIZE, gp.DEFAULTTILESIZE);
+			}
+		}
+
+		for (int i = 0; i < atackMoviment.length; i++) {
+			for (int j = 0; j < atackMoviment[i].length; j++) {
+				atackMoviment[i][j] = image.getSubimage(j*16, i*16+moviment.length*gp.DEFAULTTILESIZE, gp.DEFAULTTILESIZE, gp.DEFAULTTILESIZE);
+			}
+		}
 	}
 
 	/**
@@ -139,78 +132,170 @@ public class Character {
 	public void draw(Graphics2D g2) {
 		switch(direction) {
 		case 'u':
-			if(spriteNum == 1) {
-				image = up0;
-			}
-			if(spriteNum == 2) {
-				image = up1;
-			}
-			if(spriteNum == 3) {
-				image = up2;
-			}
-			if(spriteNum == 4) {
-				image = up3;
-			}
-			if(spriteNum == 5) {
-				image = up4;
+			if(attack) {
+				//Alterando entre os movimentos de ataque
+				if(spriteAttNum == 1) {
+					currentImage = atackMoviment[1][0];
+				}
+				if(spriteAttNum == 2) {
+					currentImage = atackMoviment[1][1];
+				}
+				if(spriteAttNum == 3) {
+					currentImage = atackMoviment[1][2];
+				}
+				if(spriteAttNum == 4) {
+					currentImage = atackMoviment[1][3];
+				}
+				if(spriteAttNum == 5) {
+					currentImage = atackMoviment[1][4];
+				}
+				if(spriteAttNum == 6) {
+					currentImage = atackMoviment[1][4];
+				}
+			} else {
+				//Alterando entre os movimentos de andar
+				if(spriteNum == 1) {
+					currentImage = moviment[1][0];
+				}
+				if(spriteNum == 2) {
+					currentImage = moviment[1][1];
+				}
+				if(spriteNum == 3) {
+					currentImage = moviment[1][2];
+				}
+				if(spriteNum == 4) {
+					currentImage = moviment[1][3];
+				}
+				if(spriteNum == 5) {
+					currentImage = moviment[1][4];
+				}
 			}
 			break;
 		case 'd': 
-			if(spriteNum == 1) {
-				image = down0;
-			}
-			if(spriteNum == 2) {
-				image = down1;
-			}
-			if(spriteNum == 3) {
-				image = down2;
-			}
-			if(spriteNum == 4) {
-				image = down3;
-			}
-			if(spriteNum == 5) {
-				image = down4;
+			if(attack) {
+				//Alterando entre os movimentos de ataque
+				if(spriteAttNum == 1) {
+					currentImage = atackMoviment[0][0];
+				}
+				if(spriteAttNum == 2) {
+					currentImage = atackMoviment[0][1];
+				}
+				if(spriteAttNum == 3) {
+					currentImage = atackMoviment[0][2];
+				}
+				if(spriteAttNum == 4) {
+					currentImage = atackMoviment[0][3];
+				}
+				if(spriteAttNum == 5) {
+					currentImage = atackMoviment[0][4];
+				}
+				if(spriteAttNum == 6) {
+					currentImage = atackMoviment[0][4];
+				}
+			} else {
+				//Alterando entre os movimentos de andar
+				if(spriteNum == 1) {
+					currentImage = moviment[0][0];
+				}
+				if(spriteNum == 2) {
+					currentImage = moviment[0][1];
+				}
+				if(spriteNum == 3) {
+					currentImage = moviment[0][2];
+				}
+				if(spriteNum == 4) {
+					currentImage = moviment[0][3];
+				}
+				if(spriteNum == 5) {
+					currentImage = moviment[0][4];
+				}
 			}
 			break;
 		case 'l': 
-			if(spriteNum == 1) {
-				image = left0;
+			if(attack) {
+				//Alterando entre os movimentos de ataque
+				if(spriteAttNum == 1) {
+					currentImage = atackMoviment[2][0];
+				}
+				if(spriteAttNum == 2) {
+					currentImage = atackMoviment[2][1];
+				}
+				if(spriteAttNum == 3) {
+					currentImage = atackMoviment[2][2];
+				}
+				if(spriteAttNum == 4) {
+					currentImage = atackMoviment[2][3];
+				}
+				if(spriteAttNum == 5) {
+					currentImage = atackMoviment[2][4];
+				}
+				if(spriteAttNum == 6) {
+					currentImage = atackMoviment[2][4];
+				}
+			} else {
+				//Alterando entre os movimentos de andar
+				if(spriteNum == 1) {
+					currentImage = moviment[2][0];
+				}	
+				if(spriteNum == 2) {
+					currentImage = moviment[2][1];
+				}
+				if(spriteNum == 3) {
+					currentImage = moviment[2][2];
+				}
+				if(spriteNum == 4) {
+					currentImage = moviment[2][3];
+				}
+				if(spriteNum == 5) {
+					currentImage = moviment[2][4];
+				}
 			}	
-			if(spriteNum == 2) {
-				image = left1;
-			}
-			if(spriteNum == 3) {
-				image = left2;
-			}
-			if(spriteNum == 4) {
-				image = left3;
-			}
-			if(spriteNum == 5) {
-				image = left4;
-			}
 			break;
 		case 'r':
-			if(spriteNum == 1) {
-				image = right0;
+			if(attack) {
+				//Alterando entre os movimentos de ataque
+				if(spriteAttNum == 1) {
+					currentImage = atackMoviment[3][0];
+				}
+				if(spriteAttNum == 2) {
+					currentImage = atackMoviment[3][1];
+				}
+				if(spriteAttNum == 3) {
+					currentImage = atackMoviment[3][2];
+				}
+				if(spriteAttNum == 4) {
+					currentImage = atackMoviment[3][3];
+				}
+				if(spriteAttNum == 5) {
+					currentImage = atackMoviment[3][4];
+				}
+				if(spriteAttNum == 6) {
+					currentImage = atackMoviment[3][4];
+				}
+			} else {
+				//Alterando entre os movimentos de andar
+				if(spriteNum == 1) {
+					currentImage = moviment[3][0];
+				}
+				if(spriteNum == 2) {
+					currentImage = moviment[3][1];
+				}
+				if(spriteNum == 3) {
+					currentImage = moviment[3][2];
+				}
+				if(spriteNum == 4) {
+					currentImage = moviment[3][3];
+				}
+				if(spriteNum == 5) {
+					currentImage = moviment[3][4];
+				}
+				break;
 			}
-			if(spriteNum == 2) {
-				image = right1;
-			}
-			if(spriteNum == 3) {
-				image = right2;
-			}
-			if(spriteNum == 4) {
-				image = right3;
-			}
-			if(spriteNum == 5) {
-				image = right4;
-			}
-			break;
 		}
-		
-		g2.drawImage(image, xScreen, yScreen, gp.TILESIZE, gp.TILESIZE, null);
+
+		g2.drawImage(currentImage, xScreen, yScreen, gp.TILESIZE, gp.TILESIZE, null);
 	}
-	
+
 	/**
 	 * Faz a atualização das coordenadas do personagem de acordo com a velocidade definida e verificar se é um
 	 * caminho de fato e atualiza as 'sprites' referentes a imagem do personagem andando
@@ -364,6 +449,8 @@ public class Character {
 				if(addItem(gp.item[i])) {
 					gp.item[i] = null;
 					gp.ui.setMessage("Voce pegou um item!");
+				} else {
+					gp.ui.setMessage("Inventario cheio!");
 				}
 			}
 		}		
@@ -390,7 +477,8 @@ public class Character {
 	 * @param item item que o usuário pegou
 	 */	
 	public boolean addItem(SuperItem item) {
-		if(this.item.size() < 2) {
+		//Verifica se o inventário do personagem está cheio
+		if(this.item.size() < invetorySize) {
 			this.item.add(item);	
 			return true;			
 		}

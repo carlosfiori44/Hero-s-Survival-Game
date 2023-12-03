@@ -2,6 +2,7 @@ package player;
 
 import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
@@ -91,7 +92,32 @@ public class Player extends Character {
 		}
 
 		//Váriaveis de atualização das imagens de animação do personagem
-		if(key.down || key.up || key.right || key.left) {
+		//Atualização do ataque
+		if(attack) {
+			attackCounter++;
+			
+			if(attackCounter > 4) {
+				if(spriteAttNum == 1) {
+					spriteAttNum = 2;
+				} else if(spriteAttNum == 2) {
+					spriteAttNum = 3;
+				} else if(spriteAttNum == 3) {
+					spriteAttNum = 4;
+				}else if(spriteAttNum == 4) {
+					spriteAttNum = 5;
+				}else if(spriteAttNum == 5) {
+					spriteAttNum = 6;
+				} else if(spriteAttNum == 6) {
+					spriteAttNum = 1;
+				}
+				attackCounter = 0;
+			}
+		} else {
+			spriteAttNum = 1;
+		}
+		
+		//Atualização da movimentação
+		if(!attack && key.down || key.up || key.right || key.left) {
 			spriteCounter++;
 			if(spriteCounter > 8) {
 				if(spriteNum == 1) {
@@ -107,6 +133,8 @@ public class Player extends Character {
 				}				
 				spriteCounter = 0;
 			}
+		} else {
+			spriteNum = 1;
 		}
 	}
 }

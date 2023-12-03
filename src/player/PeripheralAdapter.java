@@ -38,7 +38,10 @@ public class PeripheralAdapter implements KeyListener {
 				break;
 			case KeyEvent.VK_E:
 				action = true;
-				break;
+				break;				
+			case KeyEvent.VK_F:
+				gp.player.attack = true;
+				break;				
 			case KeyEvent.VK_ESCAPE:
 				gp.gameState = gp.PAUSESCREEN;			
 				break;
@@ -131,6 +134,9 @@ public class PeripheralAdapter implements KeyListener {
 			break;
 		case KeyEvent.VK_E:
 			action = false;
+			break;
+		case KeyEvent.VK_F:
+			gp.player.attack = false;
 			break;
 		case KeyEvent.VK_ESCAPE:
 			esc = false;

@@ -17,9 +17,9 @@ public class ART_Heart extends SuperItem {
 		name = "Damage Increase";
 		
 		try {
-			image = ImageIO.read(getClass().getResource("/player/heart.png"));
-			image1 = ImageIO.read(getClass().getResource("/player/halfHeart.png"));
-			image2 = ImageIO.read(getClass().getResource("/player/emptyHeart.png"));
+			image = ImageIO.read(getClass().getResource("/playerAttributes/heart.png"));
+			image1 = ImageIO.read(getClass().getResource("/playerAttributes/halfHeart.png"));
+			image2 = ImageIO.read(getClass().getResource("/playerAttributes/emptyHeart.png"));
 		} catch (IOException e) {
 			
 		}

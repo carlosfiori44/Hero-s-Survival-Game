@@ -47,6 +47,7 @@ public class UserInterface {
 		this.gp = gp;
 		option = 0;
 
+		//Carrega as fontes de letras do jogo
 		InputStream inputStream = getClass().getResourceAsStream("/font/Dwarf Fat Regular.otf");
 		try {
 			gameFont = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(28F);
@@ -240,7 +241,7 @@ public class UserInterface {
 				-textContainer.getWidth(), textContainer.getHeight(), null);
 
 		//Desenhando o personagem no menu
-		g2.drawImage(gp.player.down1, gp.getHeight()/2 - gp.TILESIZE*4/2, gp.getWidth()/4 + gp.TILESIZE*3/2, gp.TILESIZE*3, gp.TILESIZE*3, null);
+		g2.drawImage(gp.player.moviment[0][1], gp.getHeight()/2 - gp.TILESIZE*4/2, gp.getWidth()/4 + gp.TILESIZE*3/2, gp.TILESIZE*3, gp.TILESIZE*3, null);
 
 		g2.setFont(gameFont);
 
