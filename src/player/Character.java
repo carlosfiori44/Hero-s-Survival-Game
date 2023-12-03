@@ -386,23 +386,6 @@ public class Character {
 	}
 
 	/**
-	 * Mostra os itens dentro do invetário do personagem 
-	 * @param g2 recebe o componente gráfico do tipo Graphics2D para adicionalo a tela
-	 */
-	public void showItem(Graphics2D g2) {
-		int positionY = 50;
-
-		for(SuperItem i : item){
-			i.setPositionX(1);
-			i.setPositionY(42);
-
-			g2.drawImage(i.image, 0, positionY, gp.TILESIZE/2, gp.TILESIZE/2, null);
-
-			positionY += gp.TILESIZE + 4;
-		}
-	}
-
-	/**
 	 * Adiciona o item que o usuário pegou próximo a ele
 	 * @param item item que o usuário pegou
 	 */	

@@ -6,17 +6,16 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import item.ART_Heart;
+import item.SuperItem;
 
 /**
  * Gerencia e mostra as mensagens e menus para o jogador
@@ -30,7 +29,6 @@ public class UserInterface {
 	public boolean gameEnd = false; 
 	private int messageTimer = 0;
 	private double timer = 0; 
-	private DecimalFormat timerFormat = new DecimalFormat("#0");
 	//Imagens do menu incial
 	public BufferedImage textContainer, btDefault, selectionDagger; 
 	//Imagem da vida do jogador
@@ -137,11 +135,19 @@ public class UserInterface {
 		//Informação sobre a quantidade de itens do jogador
 		g2.setFont(defaultFont);
 		g2.setColor(Color.white);
-		g2.drawString("Itens: " + gp.player.item.size(), 0, 40);
-
+		g2.drawString("Itens: " + gp.player.item.size(), 0, 40);	
+		
 		//Temporizador do jogo
 		timer += (double) 1/60;
-		g2.drawString("Tempo: " + timerFormat.format(timer), (int) (gp.SCREENWIDTH - g2.getFontMetrics().getStringBounds("Tempo: " + timerFormat.format(timer), g2).getWidth()), 40);
+		
+		int h, m, s;
+		//Transformando o temporizador em horas, minutos e segundos
+		h =  (int)(timer/60/60);
+		m =  (int)(timer/60 - 60 * (int)(timer/60/60));
+		s =  (int) (timer - 60 * (int)(timer/60));
+		
+		String currentTime = h + ":" + m + ":" + s;
+		g2.drawString(currentTime, (int) (gp.SCREENWIDTH - g2.getFontMetrics().getStringBounds(currentTime, g2).getWidth()), 40);
 
 		//Mesnagem que aparece na tela 
 		if(messageVisible) {
@@ -157,6 +163,23 @@ public class UserInterface {
 		}
 
 		drawPlayerLife();
+		showItem();
+	}
+	
+	/**
+	 *  Mostra os itens dentro do invetário do personagem 
+	 */
+	public void showItem() {
+		int positionY = 50;
+
+		for(SuperItem i : gp.player.item){
+			i.setPositionX(1);
+			i.setPositionY(42);
+
+			g2.drawImage(i.image, 0, positionY, gp.TILESIZE/2, gp.TILESIZE/2, null);
+
+			positionY += gp.TILESIZE + 4;
+		}
 	}
 
 	/**
