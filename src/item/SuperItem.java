@@ -19,7 +19,7 @@ public class SuperItem {
 		int	screenY = worldY - gp.player.yWorld + gp.player.yScreen;
 
 		//Verifica se o bloco esta dentro dos limites da janela para que ele não renderize o mapa inteiro e economize desempenho
-		if(worldX + gp	.TILESIZE > gp.player.xWorld - gp.player.xScreen && worldX - gp.TILESIZE < gp.player.xWorld + gp.player.xScreen &&
+		if(worldX + gp.TILESIZE > gp.player.xWorld - gp.player.xScreen && worldX - gp.TILESIZE < gp.player.xWorld + gp.player.xScreen &&
 				worldY + gp.TILESIZE > gp.player.yWorld - gp.player.yScreen && worldY - gp.TILESIZE < gp.player.yWorld + gp.player.yScreen) {
 			g2.drawImage(image, screenX, screenY, gp.TILESIZE/2, gp.TILESIZE/2, null);
 		}

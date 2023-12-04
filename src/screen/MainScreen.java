@@ -19,11 +19,7 @@ public class MainScreen extends JFrame {
 		setResizable(false);
 		
 		//Adicionando o imagem de fundo da tela (JPanel)
-		add(game);			
-		//Definindo primeiras configurações do jogo inicio do jogo
-		game.setupGame();		
-		//Iniciando thread que vai rodar o o JFrame do jogo
-		game.startGameThread();
+		add(game);					
 		
 		pack();		
 		setVisible(true);		

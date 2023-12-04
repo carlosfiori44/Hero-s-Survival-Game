@@ -1,4 +1,5 @@
 /background/
+/character/
 /construction/
 /executable/
 /font/
@@ -7,9 +8,8 @@
 /map/
 /objects/
 /player/
+/playerAttributes/
 /screen/
 /startScreen/
 /tile/
-/attributes/
-/teste/
-/playerAttributes/
+/enemy/

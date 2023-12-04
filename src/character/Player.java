@@ -1,11 +1,13 @@
-package player;
+package character;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
+import item.SuperItem;
 import screen.GamePanel;
 
 /**
@@ -23,20 +25,15 @@ public class Player extends Character {
 		super(gp);
 		this.key = key;
 
+		//Definindo a quantidade de imagens de movimentação
+		moviment = new BufferedImage[4][5];
+		attackMoviment = new BufferedImage[4][6];		
 
 		xScreen = (gp.SCREENWIDTH/2) - (gp.TILESIZE/2);
 		yScreen = (gp.SCREENHEIGHT/2) - (gp.TILESIZE/2);
 
 		xWorld = 25*gp.TILESIZE;
 		yWorld = 5*gp.TILESIZE;
-
-		direction = 'd';
-
-		bounds = new Rectangle();		
-		bounds.height = 11*gp.SCALE;
-		bounds.width = 8*gp.SCALE;
-		bounds.x = 4*gp.SCALE;
-		bounds.y = 4*gp.SCALE;
 
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/player/Borg.png"));
@@ -45,38 +42,41 @@ public class Player extends Character {
 		}		
 	}
 
+	@Override
+	public void draw(Graphics2D g2) {		
+		super.draw(g2);
+		g2.drawImage(currentImage, xScreen, yScreen, gp.TILESIZE, gp.TILESIZE, null);
+	}
 
 	@Override
 	public void update() {		
 		//Verifica se objetos especificos estão na posição do personagem
-		checkObjectCollision();
-
+		checkObjectCollision();		
+				
 		if(key.down) {
 			direction = 'd';
-			if(checkCollision()) {
-				yWorld+=currentSpeed; 
+			if(checkCollision() && checkCharacterCollision()) {
+				yWorld+=currentSpeed; 				
 			}
 		}
 
 		if(key.up) {
 			direction = 'u';
-			if(checkCollision()) {
+			if(checkCollision() && checkCharacterCollision()) {
 				yWorld-=currentSpeed;		
 			}
 		}
 
 		if(key.left) {
 			direction = 'l';
-
-			if(checkCollision()) {
+			if(checkCollision() && checkCharacterCollision()) {
 				xWorld-=currentSpeed; 	
 			}
 		}
 
 		if(key.right) {
 			direction = 'r';
-
-			if(checkCollision()) {
+			if(checkCollision() && checkCharacterCollision()) {
 				xWorld+=currentSpeed; 	
 			}
 		}
@@ -89,52 +89,45 @@ public class Player extends Character {
 					}
 				}
 			}
-		}
-
-		//Váriaveis de atualização das imagens de animação do personagem
-		//Atualização do ataque
-		if(attack) {
-			attackCounter++;
-			
-			if(attackCounter > 4) {
-				if(spriteAttNum == 1) {
-					spriteAttNum = 2;
-				} else if(spriteAttNum == 2) {
-					spriteAttNum = 3;
-				} else if(spriteAttNum == 3) {
-					spriteAttNum = 4;
-				}else if(spriteAttNum == 4) {
-					spriteAttNum = 5;
-				}else if(spriteAttNum == 5) {
-					spriteAttNum = 6;
-				} else if(spriteAttNum == 6) {
-					spriteAttNum = 1;
-				}
-				attackCounter = 0;
-			}
-		} else {
-			spriteAttNum = 1;
-		}
+		}		
 		
 		//Atualização da movimentação
 		if(!attack && key.down || key.up || key.right || key.left) {
-			spriteCounter++;
-			if(spriteCounter > 8) {
-				if(spriteNum == 1) {
-					spriteNum = 2;
-				} else if(spriteNum == 2) {
-					spriteNum = 3;
-				} else if(spriteNum == 3) {
-					spriteNum = 4;
-				}else if(spriteNum == 4) {
-					spriteNum = 5;
-				}else if(spriteNum == 5) {
-					spriteNum = 2;
-				}				
-				spriteCounter = 0;
-			}
+			moving = true;
 		} else {
-			spriteNum = 1;
+			moving = false;
 		}
+	
+		super.update();			
+	}
+	
+	@Override
+	public void checkObjectCollision() {
+		for(int i = 0; i < gp.item.length; i++) {
+			if(gp.item[i] != null && gp.item[i].findItem(new Rectangle(xWorld, yWorld, gp.TILESIZE, gp.TILESIZE))) {
+				if(addItem(gp.item[i])) {
+					gp.item[i] = null;
+					gp.ui.setMessage("Voce pegou um item!");
+				} else {
+					gp.ui.setMessage("Inventario cheio!");
+				}
+			}
+		}	
+		
+		super.checkObjectCollision();
+	}
+	
+	/**
+	 * Adiciona o item que o usuário pegou próximo a ele
+	 * @param item item que o usuário pegou
+	 */	
+	public boolean addItem(SuperItem item) {
+		//Verifica se o inventário do personagem está cheio
+		if(this.item.size() < invetorySize) {
+			this.item.add(item);	
+			return true;			
+		}
+
+		return false;
 	}
 }

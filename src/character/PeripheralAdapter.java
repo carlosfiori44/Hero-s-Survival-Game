@@ -1,6 +1,5 @@
-package player;
+package character;
 
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -97,10 +96,6 @@ public class PeripheralAdapter implements KeyListener {
 					gp.ui.option = 0;
 				}				
 				break;			
-			case KeyEvent.VK_ESCAPE:
-				gp.gameState = gp.PLAYSCREEN;
-				gp.ui.option = 0;
-				break;
 			case KeyEvent.VK_ENTER:
 				if(gp.ui.option == 0) {
 					//Inicia o jogo

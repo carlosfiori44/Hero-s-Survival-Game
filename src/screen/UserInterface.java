@@ -114,7 +114,7 @@ public class UserInterface {
 			g2.setFont(defaultFont);
 			g2.drawString(thanks, (gp.SCREENWIDTH)/2 - (int) g2.getFontMetrics().getStringBounds(thanks, g2).getWidth()/2, gp.TILESIZE*3);
 
-			gp.player.setPosition(gp.SCREENWIDTH/2 - gp.player.getBounds().width, gp.TILESIZE*4);
+			gp.player.setPosition(gp.SCREENWIDTH/2 - gp.player.bounds.width, gp.TILESIZE*4);
 
 			gp.player.draw(g2);
 

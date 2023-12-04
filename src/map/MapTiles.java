@@ -1,6 +1,7 @@
 package map;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +12,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import player.Player;
 import screen.GamePanel;
 
 /**
@@ -173,7 +173,7 @@ public class MapTiles {
 
 				g2.drawImage(mapTile[tileNumM].image, screenX, screenY, gp.TILESIZE, gp.TILESIZE, null);
 
-				//Desconsiderando espaços vazios
+				//Desconsiderando espaços vazios na matrix de bloco
 				if(tileNumC >= 0 && tileNumC < numTile) {
 					g2.drawImage(constructionTile[tileNumC].image, screenX, screenY, gp.TILESIZE, gp.TILESIZE, null);
 				}
@@ -185,14 +185,14 @@ public class MapTiles {
 				col = 0;
 				row++;
 			}
-
-			if(gp.player.xWorld + 10 > maxWorldCol * gp.TILESIZE || gp.player.yWorld + 10 > maxWorldRow * gp.TILESIZE ||
-					gp.player.xWorld - 10 < 0 || gp.player.yWorld - 10 < 0) {
-				System.out.println(gp.player.xWorld + " | " + gp.player.yWorld);
-				System.out.println(maxWorldCol * gp.TILESIZE + " | " + maxWorldRow * gp.TILESIZE);
-			}
 		}
 	}
 
-
+	/**
+	 * Verifica a posição que o castelo está no mapa
+	 * @return Retorna a posição e a medida do castelo no tipo Rectangle
+	 */
+	public Rectangle getCastleBounds() {
+		return new Rectangle(28*gp.TILESIZE, 10*gp.TILESIZE, 7*gp.TILESIZE, 6*gp.TILESIZE);
+	}
 }

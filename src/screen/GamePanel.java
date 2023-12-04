@@ -8,12 +8,14 @@ import java.awt.Rectangle;
 
 import javax.swing.JPanel;
 
+import character.ActionController;
+import character.Character;
+import character.Enemy_Goblin;
+import character.PeripheralAdapter;
+import character.Player;
 import item.SetItem;
 import item.SuperItem;
 import map.MapController;
-import player.ActionController;
-import player.PeripheralAdapter;
-import player.Player;
 
 /**
  * Classe que é uma generalização do JPanel e faz toda a junção das outras classes do jogo
@@ -50,7 +52,10 @@ public class GamePanel extends JPanel implements Runnable {
 	//Definindo classe de itens, 'inventário de itens' e localização de itens
 	public SetItem setItem = new SetItem(this);
 	public SuperItem item[] = new SuperItem[4];	
-
+	
+	//Declarando os inimigos
+	public Character enemy[];
+	int wave = 0; 	
 
 	/**
 	 * Método construtor da clase Fase, utilizada quando a mesma é instanciada
@@ -63,8 +68,8 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setLayout(null);	
 		this.addKeyListener(peripheral);	
 
-		player.load();			
-		map.load();		
+		setupGame();
+		startGameThread();
 	}
 
 	/**
@@ -72,6 +77,9 @@ public class GamePanel extends JPanel implements Runnable {
 	 */
 	public void setupGame() {
 		setItem.setItem();
+		player.load();		
+		map.load();	
+		setWave();
 	}
 
 	/**
@@ -80,6 +88,28 @@ public class GamePanel extends JPanel implements Runnable {
 	public void startGameThread() {
 		gameThread = new Thread(this);
 		gameThread.start();	
+	}
+	
+	/**
+	 * Define os inimigos de acordo com a wave de inimigos atual
+	 */
+	public void setWave() {
+		
+		if(wave == 0) {
+			enemy = new Enemy_Goblin[4];
+		} else if(wave == 1) {
+			enemy = new Enemy_Goblin[8];
+		} else {
+			enemy = new Enemy_Goblin[12];
+		}
+		
+		for(int i = 0; i < enemy.length; i++) {
+			enemy[i] = new Enemy_Goblin(this);
+			enemy[i].load();	
+		}		
+		
+		enemy[0].xWorld = 25* TILESIZE;
+		enemy[0].yWorld = 9* TILESIZE;	
 	}
 
 	//É executado assim que a thread se inicia
@@ -108,7 +138,8 @@ public class GamePanel extends JPanel implements Runnable {
 	 */
 	public void update() {
 		if(gameState == PLAYSCREEN) {
-			player.update();				
+			player.update();	
+			enemy[0].update();
 		} 					
 	}
 
@@ -127,7 +158,9 @@ public class GamePanel extends JPanel implements Runnable {
 			}				
 		}
 
+		enemy[0].draw(graphics);	
 		player.draw(graphics);
+		
 		ui.draw(graphics);
 
 		g.dispose();
