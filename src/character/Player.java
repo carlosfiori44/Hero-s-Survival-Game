@@ -91,13 +91,18 @@ public class Player extends Character {
 			}
 		}		
 		
-		//Atualização da movimentação
-		if(!attack && key.down || key.up || key.right || key.left) {
+		if(key.attack) {
+			attack = true;
+		} else {
+			attack = false;
+		}
+		
+		if(key.down || key.up || key.left || key.right) {
 			moving = true;
 		} else {
 			moving = false;
-		}
-	
+		}		
+		
 		super.update();			
 	}
 	

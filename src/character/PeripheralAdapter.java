@@ -10,7 +10,7 @@ import screen.GamePanel;
  */
 public class PeripheralAdapter implements KeyListener {
 	//Declarando atributos relacionados a movimentação do player
-	public boolean up, down, left, right, action, esc;	
+	public boolean up, down, left, right, action, attack, esc;	
 	//Váriavel do painel que executa o jogo
 	private GamePanel gp;
 
@@ -39,7 +39,7 @@ public class PeripheralAdapter implements KeyListener {
 				action = true;
 				break;				
 			case KeyEvent.VK_F:
-				gp.player.attack = true;
+				attack = true;
 				break;				
 			case KeyEvent.VK_ESCAPE:
 				gp.gameState = gp.PAUSESCREEN;			
@@ -131,7 +131,7 @@ public class PeripheralAdapter implements KeyListener {
 			action = false;
 			break;
 		case KeyEvent.VK_F:
-			gp.player.attack = false;
+			attack = false;
 			break;
 		case KeyEvent.VK_ESCAPE:
 			esc = false;

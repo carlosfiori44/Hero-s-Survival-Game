@@ -319,7 +319,7 @@ public class Character {
 		}
 
 		//Atualização da movimentação
-		if(!attack && moving) {
+		if(moving) {
 			spriteCounter++;
 			if(spriteCounter > 8) {
 				if(spriteNum == 1) {
