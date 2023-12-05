@@ -25,8 +25,6 @@ public class Character {
 	public boolean moving = true;
 	public boolean characterCollision = false;
 
-	//Respectivos tamanho da imagem do personagem
-	protected final int ALTURA = 16, LARGURA = 16;
 	//Declarando atributos utilizados em cada personagem
 	public int xScreen, yScreen, xWorld, yWorld;
 
@@ -37,7 +35,7 @@ public class Character {
 	public Rectangle bounds;
 	
 	//Atributo referente ao painel da janela
-	protected GamePanel gp;
+	public GamePanel gp;
 
 	//Definindo inventário do personagem
 	public int invetorySize = 4;
@@ -48,8 +46,8 @@ public class Character {
 	public int maxLife;
 	public int currentLife;
 	//Velocidade do personagem
-	protected final int DEFAULTSPEED = 6;
-	protected int currentSpeed = DEFAULTSPEED;
+	public final int DEFAULTSPEED = 6;
+	public int currentSpeed = DEFAULTSPEED;
 
 	public Character(GamePanel gp) {
 		this.gp = gp;
@@ -58,13 +56,13 @@ public class Character {
 		//Definindo valor padrão do tamanho do personagem
 		bounds = new Rectangle(4*gp.SCALE, 4*gp.SCALE, 8*gp.SCALE, 11*gp.SCALE);		
 
-		setPlayerAttibutes();
+		setPlayerAttributes();
 	}
 
 	/**
 	 * Define os atributos do personagem com base na classe escolhida
 	 */
-	public void setPlayerAttibutes() {
+	public void setPlayerAttributes() {
 		switch(characterClass) {
 		//***Classes***
 		//Cavaleiro

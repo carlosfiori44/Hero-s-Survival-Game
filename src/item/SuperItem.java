@@ -8,10 +8,10 @@ import screen.GamePanel;
 
 public class SuperItem {
 	public BufferedImage image, image1, image2;
-	protected String name;
-	protected boolean collision = false;
-	protected int worldX, worldY;
-	protected GamePanel gp;
+	public String name;
+	public boolean collision = false;
+	public int worldX, worldY;
+	public GamePanel gp;
 	
 	public void draw(Graphics2D g2) {	
 		//Pega as coordenadas atuais da janela, que é onde o player está no mapa
@@ -52,11 +52,8 @@ public class SuperItem {
 	}
 	
 	//Getters e setters
-	public void setPositionX(int positionX) {
+	public void setPosition(int positionX, int positionY) {
 		this.worldX = positionX;
-	}
-
-	public void setPositionY(int positionY) {
 		this.worldY = positionY;
 	}
 }
