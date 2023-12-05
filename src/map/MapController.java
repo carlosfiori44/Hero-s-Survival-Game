@@ -16,7 +16,7 @@ public class MapController {
 	//Definindo o atributos das imagens de fundo
 	private BufferedImage map_Island_Image;
 	//Variavel que guarda o fundo atual somente com as localizações permitidas para movimentação
-	private static BufferedImage currentBackgroundAllow;	
+	private BufferedImage currentBackgroundAllow;	
 	//Variavel que irá indicar o mapa que deverá aparecer
 	public int map;
 	//Definindo quais os mapas para passagem
@@ -25,7 +25,7 @@ public class MapController {
 	public final int MAP_CASTLE = 2;
 	//Definindo atributo referente a classe MapTiles para os mapas gerados
 	public MapTiles mapTile;
-	GamePanel gp;
+	public GamePanel gp;
 	
 	public MapController(GamePanel gp) {
 		this.gp = gp;
@@ -54,7 +54,7 @@ public class MapController {
 	 * @param y coordenada horizontal de onde quer verificar
 	 * @return verdadeiro caso seja caminhável ou falso caso contrario
 	 */
-	public static boolean isWalkable(int x, int y) {
+	public boolean isWalkable(int x, int y) {
 		int rgb = currentBackgroundAllow.getRGB(x, y);
 		
 		if(rgb == 0) {

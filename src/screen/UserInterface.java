@@ -174,8 +174,7 @@ public class UserInterface {
 		int positionY = 50;
 
 		for(SuperItem i : gp.player.item){
-			i.setPositionX(1);
-			i.setPositionY(42);
+			i.setPosition(1, 42);
 
 			g2.drawImage(i.image, 0, positionY, gp.TILESIZE/2, gp.TILESIZE/2, null);
 

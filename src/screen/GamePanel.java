@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	//Declarando os inimigos
 	public Character enemy[];
-	int wave = 0; 	
+	public int wave = 0; 	
 
 	/**
 	 * Método construtor da clase Fase, utilizada quando a mesma é instanciada

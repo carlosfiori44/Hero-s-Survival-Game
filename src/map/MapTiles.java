@@ -27,7 +27,6 @@ public class MapTiles {
 	public int construcTilePosition[][];
 	private int maxWorldCol = 0;
 	private int maxWorldRow = 0;
-	//private int maxWorldWidth, maxWorldHeight;
 
 	public MapTiles(GamePanel gp){
 		this.gp = gp;
